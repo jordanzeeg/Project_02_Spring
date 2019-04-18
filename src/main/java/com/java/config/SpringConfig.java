@@ -3,6 +3,7 @@ package com.java.config;
 import java.io.IOException;
 import java.util.Properties;
 
+import com.java.dto.*;
 import org.apache.tomcat.dbcp.dbcp2.BasicDataSource;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Environment;
@@ -15,11 +16,6 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-
-import com.java.dto.Comment;
-import com.java.dto.Friend;
-import com.java.dto.Like;
-import com.java.dto.Post;
 
 @Configuration
 @ComponentScan("com.java")
@@ -60,7 +56,7 @@ public class SpringConfig {
         hibernateProperties.setProperty(Environment.SHOW_SQL, "true");
         hibernateProperties.setProperty(Environment.DIALECT, "org.hibernate.dialect.Oracle12cDialect");
         //hibernateProperties.setProperty(Environment.HBM2DDL_AUTO, "create");
-        factoryBean.setAnnotatedClasses(Comment.class, Friend.class, Like.class, Post.class);
+        factoryBean.setAnnotatedClasses(Comment.class, Friend.class, CommentLike.class, PostLike.class, Post.class);
         factoryBean.setHibernateProperties(hibernateProperties);
         factoryBean.afterPropertiesSet();
         return factoryBean.getObject();

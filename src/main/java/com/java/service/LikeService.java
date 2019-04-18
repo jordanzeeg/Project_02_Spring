@@ -1,6 +1,6 @@
 package com.java.service;
 
-import com.java.dto.Like;
+import com.java.dto.CommentLike;
 
-public class LikeService implements Service<Like> {
+public class LikeService implements Service<CommentLike> {
 }

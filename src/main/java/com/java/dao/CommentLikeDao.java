@@ -1,7 +1,7 @@
 package com.java.dao;
 
 import java.util.List;
-
+import java.util.Optional;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -11,43 +11,37 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
+import com.java.dto.Friend;
+import com.java.dto.Like;
 
-import com.java.dto.Post;
-
-public class PostDao implements Dao<Post> {
+public class CommentLikeDao implements Dao<CommentLike> {
 	@Autowired
 	@Qualifier("sessionFactory")
 	SessionFactory sf;
 	
 	@Override
-	public Post get(int id) {
+	public CommentLike get(int id) {
 		Session s=sf.openSession();
-		Post t = s.get(Post.class, id);
+		CommentLike t = s.get(CommentLike.class, id);
 		s.close();
 		return t;
+		return null;
 	}
 
 	@Override
-	public List<Post> getAll() {
-		Session session=sf.openSession();
-		
+	public List<CommentLike> getAll() {
 		//Use nondeprecated things to do criteria
 		CriteriaBuilder builder = session.getCriteriaBuilder();
-		CriteriaQuery<Post> criteriaQuery = builder.createQuery(Post.class);
-		criteriaQuery.from(Post.class);
-		List<Post> list = session.createQuery(criteriaQuery).getResultList(); //call session 
+		CriteriaQuery<CommentLike> criteriaQuery = builder.createQuery(CommentLike.class);
+		criteriaQuery.from(CommentLike.class);
+		List<CommentLike> list = session.createQuery(criteriaQuery).getResultList(); //call session 
 		session.close();
 		return list;
+		return null;
 	}
 
 	@Override
-	public void save(Post t) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void update(Post t) {
+	public void save(CommentLike t) {
 		Session s =sf.openSession();
 		s.beginTransaction();
 		s.save(t);
@@ -56,12 +50,25 @@ public class PostDao implements Dao<Post> {
 	}
 
 	@Override
-	public void delete(Post t) {
+	public void update(CommentLike t) {
 		Session s = sf.openSession();
 		s.beginTransaction();
 		s.update(t);
 		s.getTransaction().commit();
 		s.close();		
+		
 	}
+
+	@Override
+	public void delete(CommentLike t) {
+		Session s=sf.openSession();
+		s.beginTransaction();
+		s.delete(t);
+		s.getTransaction().commit();
+		s.close();
+		
+	}
+
+
 
 }

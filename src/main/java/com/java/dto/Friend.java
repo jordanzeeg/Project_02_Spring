@@ -1,5 +1,7 @@
 package com.java.dto;
 
+import org.hibernate.mapping.Join;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -28,8 +30,14 @@ public class Friend {
     @Column(name = "email", unique = true, nullable = false)
     private String email;
 
-    @OneToMany(mappedBy = "friend")
-   private List<Post> postsCreated;
+
+    @ManyToMany
+    @JoinTable(
+            name = "FRIEND_POST",
+            joinColumns = {@JoinColumn(name = "friend_id")},
+            inverseJoinColumns = {@JoinColumn(name = "post_id")}
+    )
+    private List<Post> posts;
 
     //TODO: - add property for profile pic (S3)
 
@@ -39,14 +47,14 @@ public class Friend {
     }
 
     public Friend(String username, String password, String firstName, String lastName, String email,
-                  List<Post> postsCreated) {
+                  List<Post> posts) {
         //this.salt = salt;
         this.username = username;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        this.postsCreated = postsCreated;
+        this.posts = posts;
     }
 
     // Getters and Setters
@@ -99,12 +107,12 @@ public class Friend {
         this.email = email;
     }
 
-    public List<Post> getPostsCreated() {
-        return postsCreated;
+    public List<Post> getPosts() {
+        return posts;
     }
 
-    public void setPostsCreated(List<Post> postsCreated) {
-        this.postsCreated = postsCreated;
+    public void setPosts(List<Post> posts) {
+        this.posts = posts;
     }
 
 
@@ -119,7 +127,7 @@ public class Friend {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
-                ", postsCreated=" + postsCreated +
+                ", posts=" + posts +
                 '}';
     }
 }

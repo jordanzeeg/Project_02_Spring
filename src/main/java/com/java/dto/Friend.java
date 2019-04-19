@@ -9,28 +9,117 @@ public class Friend {
     @GeneratedValue
     @Id
     @Column(name = "id")
-    int id;
+    private int id;
 
-    int salt;
+    //private int salt;
 
     @Column(name = "username", unique = true, nullable = false)
-    String username;
+    private String username;
 
     @Column(name = "password", nullable = false)
-    String password;
+    private String password;
 
     @Column(name = "first_name", nullable = false)
-    String firstName;
+    private String firstName;
 
     @Column(name = "last_name", nullable = false)
-    String lastName;
+    private String lastName;
 
     @Column(name = "email", unique = true, nullable = false)
-    String email;
+    private String email;
 
-    //TODO: - fix blob
-    //Blob profilePic;
+    @OneToMany(mappedBy = "friend")
+   private List<Post> postsCreated;
 
-    //TODO: - Map M:N rltshp to Post
-    List<Post> posts;
+    //TODO: - add property for profile pic (S3)
+
+    // Constructors
+
+    public Friend() {
+    }
+
+    public Friend(String username, String password, String firstName, String lastName, String email,
+                  List<Post> postsCreated) {
+        //this.salt = salt;
+        this.username = username;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.postsCreated = postsCreated;
+    }
+
+    // Getters and Setters
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public List<Post> getPostsCreated() {
+        return postsCreated;
+    }
+
+    public void setPostsCreated(List<Post> postsCreated) {
+        this.postsCreated = postsCreated;
+    }
+
+
+    // Utility
+
+    @Override
+    public String toString() {
+        return "Friend{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", postsCreated=" + postsCreated +
+                '}';
+    }
 }

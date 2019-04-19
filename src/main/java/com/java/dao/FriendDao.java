@@ -7,6 +7,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 
 
+import com.java.util.LoggerSingleton;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +46,7 @@ public class FriendDao implements Dao<Friend> {
 	//insert friend into the database if friend does not exist
 	@Override
 	public void save(Friend t) {
+		LoggerSingleton.getLogger().info("In the save method");
 		Session s =sf.openSession();
 		s.beginTransaction();
 		s.save(t);

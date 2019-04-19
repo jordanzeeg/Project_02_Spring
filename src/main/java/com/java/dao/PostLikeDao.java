@@ -9,9 +9,14 @@ import javax.persistence.criteria.CriteriaQuery;
 import org.hibernate.Session;
 
 import com.java.dto.CommentLike;
-import com.java.dto.Like;
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 public class PostLikeDao implements Dao<CommentLike> {
+	@Autowired
+	@Qualifier("sessionFactory")
+	SessionFactory sf;
 
 	@Override
 	public CommentLike get(int id) {

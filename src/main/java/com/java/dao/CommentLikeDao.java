@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 import com.java.dto.Friend;
-import com.java.dto.Like;
+import com.java.dto.CommentLike;
 
 public class CommentLikeDao implements Dao<CommentLike> {
 	@Autowired
@@ -25,19 +25,20 @@ public class CommentLikeDao implements Dao<CommentLike> {
 		CommentLike t = s.get(CommentLike.class, id);
 		s.close();
 		return t;
-		return null;
+
 	}
 
 	@Override
 	public List<CommentLike> getAll() {
+		Session s=sf.openSession();
 		//Use nondeprecated things to do criteria
-		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaBuilder builder = s.getCriteriaBuilder();
 		CriteriaQuery<CommentLike> criteriaQuery = builder.createQuery(CommentLike.class);
 		criteriaQuery.from(CommentLike.class);
-		List<CommentLike> list = session.createQuery(criteriaQuery).getResultList(); //call session 
-		session.close();
+		List<CommentLike> list = s.createQuery(criteriaQuery).getResultList(); //call session
+		s.close();
 		return list;
-		return null;
+
 	}
 
 	@Override

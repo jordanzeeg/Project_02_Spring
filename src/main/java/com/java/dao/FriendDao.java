@@ -2,18 +2,17 @@ package com.java.dao;
 
 import java.util.List;
 
-
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 
-
-import com.java.util.LoggerSingleton;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Repository;
 
 import com.java.dto.Friend;
+import com.java.util.LoggerSingleton;
 
 public class FriendDao implements Dao<Friend> {
 	@Autowired

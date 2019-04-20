@@ -49,7 +49,7 @@
             <version>1.2.17</version>
         </dependency>
 
-        <!--      Hibernate/Spring configuration-->
+        <!--Hibernate/Spring configuration-->
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>

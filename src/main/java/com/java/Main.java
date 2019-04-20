@@ -1,4 +1,4 @@
-package com.java;
+/*package com.java;
 
 import com.java.dao.FriendDao;
 import com.java.dto.Friend;
@@ -16,3 +16,4 @@ public class Main {
         friendDao.save(friend);
     }
 }
+*/

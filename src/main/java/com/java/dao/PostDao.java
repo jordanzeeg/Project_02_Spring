@@ -10,10 +10,11 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-
+import org.springframework.stereotype.Repository;
 
 import com.java.dto.Post;
 
+@Repository
 public class PostDao implements Dao<Post> {
 	@Autowired
 	@Qualifier("sessionFactory")

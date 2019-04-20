@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
 import com.java.dto.Friend;
 import com.java.util.LoggerSingleton;
 
+@Repository
 public class FriendDao implements Dao<Friend> {
 	@Autowired
 	@Qualifier("sessionFactory")

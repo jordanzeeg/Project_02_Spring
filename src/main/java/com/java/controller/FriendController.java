@@ -15,7 +15,8 @@ import com.java.service.FriendService;
 @Controller
 @RequestMapping("/friends.do")
 public class FriendController {
-	@Autowired FriendService service;
+	@Autowired 
+	FriendService service;
 	
 	@GetMapping
 	public void getFriends(HttpServletResponse response) throws IOException {

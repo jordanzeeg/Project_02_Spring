@@ -10,10 +10,12 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Repository;
 
 import com.java.dto.Friend;
 import com.java.dto.CommentLike;
 
+@Repository
 public class CommentLikeDao implements Dao<CommentLike> {
 	@Autowired
 	@Qualifier("sessionFactory")

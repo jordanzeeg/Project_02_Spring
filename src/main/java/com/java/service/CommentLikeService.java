@@ -3,12 +3,14 @@ package com.java.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.java.dao.CommentLikeDao;
 import com.java.dto.Comment;
 import com.java.dto.CommentLike;
 import com.java.util.LoggerSingleton;
 
+@Service
 public class CommentLikeService implements CommentLikeServiceInterface<Comment> {
 	
 	@Autowired CommentLikeDao dao;

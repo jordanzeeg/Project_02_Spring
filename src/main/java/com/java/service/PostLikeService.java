@@ -3,11 +3,13 @@ package com.java.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.java.dao.PostLikeDao;
 import com.java.dto.CommentLike;
 import com.java.dto.PostLike;
 
+@Service
 public class PostLikeService implements PostLikeServiceInterface<PostLike> {
 	
 	@Autowired PostLikeDao dao;

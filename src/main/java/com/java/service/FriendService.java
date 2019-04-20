@@ -3,10 +3,12 @@ package com.java.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.java.dao.FriendDao;
 import com.java.dto.Friend;
 
+@Service
 public class FriendService implements FriendServiceInterface<Friend> {
 
 	@Autowired FriendDao dao;

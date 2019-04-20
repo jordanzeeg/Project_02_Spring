@@ -1,18 +1,16 @@
 package com.java.dto;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
+@Entity
 public class Post {
     @Id
     @GeneratedValue
     @Column(name = "id")
     private int id;
-
-    @ManyToOne
-    @JoinColumn(name = "friend_id", nullable = false)
-    private Friend owner;
 
     @Column(name = "description")
     private String description;
@@ -22,7 +20,7 @@ public class Post {
 
     //TODO: - Add property for post url image(S3)
 
-    @OneToMany(mappedBy = "post")
+    @ManyToMany(mappedBy = "posts")
     private List<Friend> taggedFriends;
 
     @OneToMany(mappedBy = "post")
@@ -32,16 +30,15 @@ public class Post {
     private List<PostLike> postLikes;
 
     @Column(name = "timestamp")
-    private String timestamp;
+    private Timestamp timestamp;
 
     // Constructors
 
     public Post() {
     }
 
-    public Post(Friend owner, String description, String title, List<Friend> taggedFriends, List<Comment> comments,
-                List<PostLike> postLikes, String timestamp) {
-        this.owner = owner;
+    public Post(String description, String title, List<Friend> taggedFriends, List<Comment> comments,
+                List<PostLike> postLikes, Timestamp timestamp) {
         this.description = description;
         this.title = title;
         this.taggedFriends = taggedFriends;
@@ -56,7 +53,6 @@ public class Post {
     public String toString() {
         return "Post{" +
                 "id=" + id +
-                ", owner=" + owner +
                 ", description='" + description + '\'' +
                 ", title='" + title + '\'' +
                 ", taggedFriends=" + taggedFriends +

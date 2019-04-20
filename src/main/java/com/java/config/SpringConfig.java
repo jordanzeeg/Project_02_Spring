@@ -47,26 +47,20 @@ public class SpringConfig {
     public static PropertyPlaceholderConfigurer getProperty() {
         PropertyPlaceholderConfigurer ppc = new PropertyPlaceholderConfigurer();
         ppc.setLocation(new ClassPathResource("database.properties"));
-        System.out.println(ppc);
         return ppc;
     }
     @Bean("sessionFactory")
-    public SessionFactory sessionFactory() {
+    public SessionFactory sessionFactory() throws IOException {
         LoggerSingleton.getLogger().info("In the sessionFactory method");
         LocalSessionFactoryBean factoryBean = new LocalSessionFactoryBean();
         factoryBean.setDataSource(dataSource());
         Properties hibernateProperties = new Properties();
         hibernateProperties.setProperty(Environment.SHOW_SQL, "true");
         hibernateProperties.setProperty(Environment.DIALECT, "org.hibernate.dialect.Oracle12cDialect");
-        hibernateProperties.setProperty(Environment.HBM2DDL_AUTO, "create");
-        factoryBean.setAnnotatedClasses(Comment.class, Friend.class, CommentLike.class, PostLike.class, Post.class);
+        //hibernateProperties.setProperty(Environment.HBM2DDL_AUTO, "create");
+        factoryBean.setAnnotatedClasses(Friend.class, PostLike.class, Post.class, Comment.class, CommentLike.class);
         factoryBean.setHibernateProperties(hibernateProperties);
-        try {
-            factoryBean.afterPropertiesSet();
-        } catch (IOException e) {
-            LoggerSingleton.getLogger().info("Exception encountered!!");
-            e.printStackTrace();
-        }
+        factoryBean.afterPropertiesSet();
         return factoryBean.getObject();
     }
 

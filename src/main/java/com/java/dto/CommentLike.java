@@ -4,7 +4,9 @@ package com.java.dto;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 
+@Entity
 public class CommentLike {
     @Id
     @GeneratedValue
@@ -17,14 +19,14 @@ public class CommentLike {
 
     @CreationTimestamp
     @Column(name = "timestamp")
-    private String timestamp;
+    private Timestamp timestamp;
 
 
     // Constructors
     public CommentLike() {
     }
 
-    public CommentLike(Comment comment, String timestamp) {
+    public CommentLike(Comment comment, Timestamp timestamp) {
         this.comment = comment;
         this.timestamp = timestamp;
     }
@@ -47,11 +49,11 @@ public class CommentLike {
         this.comment = comment;
     }
 
-    public String getTimestamp() {
+    public Timestamp getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(String timestamp) {
+    public void setTimestamp(Timestamp timestamp) {
         this.timestamp = timestamp;
     }
 

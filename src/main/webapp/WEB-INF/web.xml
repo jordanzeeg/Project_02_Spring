@@ -26,7 +26,7 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>spring</servlet-name>
-    <url-pattern>*.do</url-pattern>
+    <url-pattern>/</url-pattern> <!--  previously was *.do -->
   </servlet-mapping>
 </web-app>
 

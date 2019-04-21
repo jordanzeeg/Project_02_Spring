@@ -1,5 +1,6 @@
 package com.java.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.java.dao.FriendDao;
 import com.java.dto.Friend;
+import com.java.dto.Post;
 import com.java.util.LoggerSingleton;
 
 @Service
@@ -50,5 +52,20 @@ public class FriendService implements FriendServiceInterface<Friend> {
 		LoggerSingleton.getLogger().info("DELETING a Friend object from database");
 		dao.delete(t);	
 		LoggerSingleton.getLogger().info("DELETED a Friend object to database");
+	}
+	public Friend getByUsername(String username) {
+		LoggerSingleton.getLogger().info("FETCHING Friend object based on username: "+username);
+		List<Friend> friends = getAll();
+		Friend friend =null;
+		for(int i = 0; i< friends.size();i++) {
+			if(friends.get(i).getUsername() == username) {
+				friend = friends.get(i);
+				LoggerSingleton.getLogger().info("Found friend in List by Username "+username);
+			}else {
+				LoggerSingleton.getLogger().info("Did not find friend in List by Username "+username);
+			}
+		}
+		LoggerSingleton.getLogger().info("FETCHED Friend object based on username: "+username);
+		return friend;
 	}
 }

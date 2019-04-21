@@ -71,7 +71,7 @@ public class PostService implements PostServiceInterface<Post> {
 	/*This will done in the front end??*/
 	
 	@Override
-	public List<Post> getPostByTitle(String title) {
+	public List<Post> getPostByTitle(String title) { //TODO ask poho why this returns a list and not a single one
 		List<Post> post = new ArrayList<>(); //creating a new list for post that has authorId as the authorId passed in
 		LoggerSingleton.getLogger().info("GETTING Post based on title: "+title);
 		for(int i=0; i<getAll().size(); i++) {//going through the list

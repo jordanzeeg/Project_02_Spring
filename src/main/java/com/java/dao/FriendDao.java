@@ -27,6 +27,12 @@ public class FriendDao implements Dao<Friend> {
 		s.close();
 		return t;
 	}
+	public Friend getByUsername(String username) {
+		Session s=sf.openSession();
+		Friend t = s.get(Friend.class, username);
+		s.close();
+		return t;
+	}
 	
 
 	@Override

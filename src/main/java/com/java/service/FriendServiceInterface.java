@@ -11,21 +11,22 @@ import com.java.dto.Friend;
 import com.java.util.LoggerSingleton;
 
 public interface FriendServiceInterface<T> {
-	public Friend get(int id);
+	
+	public Friend get(int id); //Get a Friend/user object based on its id
 	
 
-	public List<Friend> getAll();
+	public List<Friend> getAll();//Get ALL the Friends/users from the db
 	
 	
-	//insert friend into the database if friend does not exist
+	//insert a Friend/user object into the database if friend does not exist
 	public void save(Friend t);
 
 	
-	//update the information for a friend that already exists
+	//update the information for a Friend/user object that already exists
 	public void update(Friend t);
 
 	
-	//delete object for a friend that currently exists
+	//delete a Friend/user object that currently exists
 	public void delete(Friend t);
 	
 }

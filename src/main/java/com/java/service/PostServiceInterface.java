@@ -15,6 +15,11 @@ public interface PostServiceInterface<T> {
 	
 	public void delete(Post t);
 	
-	//get post by author (order by timestamp newest first)
+	//get post by authorId (order by timestamp newest first)
+	public List<Post> getPostByAuthorId(int authorId);
+	
+	/*This will done in the front end??*/
+	//get post by title
+	public List<Post> getPostByTitle(String title);
 
 }

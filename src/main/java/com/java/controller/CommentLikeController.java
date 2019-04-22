@@ -47,7 +47,7 @@ public class CommentLikeController {
 			}
 		}
 		}
-	@GetMapping("/get/bypostid{postId}") // sets variable as part of the url
+	@GetMapping("/get/bycommentid{commentId}") // sets variable as part of the url
 	public void getCommentLikeByCommentId(@PathVariable int commentId, HttpServletResponse response) throws IOException { 
 		// @Pathvariable sets the variable in the url to the parameter
 

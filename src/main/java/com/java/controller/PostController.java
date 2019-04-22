@@ -35,7 +35,7 @@ public class PostController {
 	}
 
 		//TODO don't throw exception
-	@GetMapping("/getpostsbyuser{id}") //pass in user id
+	@GetMapping("/getpostsbyuser{authorId}") //pass in user id
 	public void GetPostsByUserId(@PathVariable int authorId, HttpServletResponse response) throws IOException {
 		List<Post> posts = service.getPostByAuthorId(authorId);
 		response.getWriter().println(posts);

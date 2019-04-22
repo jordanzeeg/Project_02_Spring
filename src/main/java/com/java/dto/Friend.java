@@ -127,7 +127,7 @@ public class Friend {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
-                ", posts=" + posts +
+                //", posts=" + posts +
                 '}';
     }
 }

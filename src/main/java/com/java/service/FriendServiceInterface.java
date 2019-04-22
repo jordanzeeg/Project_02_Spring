@@ -29,4 +29,13 @@ public interface FriendServiceInterface<T> {
 	//delete a Friend/user object that currently exists
 	public void delete(Friend t);
 	
+	//login validation
+	public boolean passwordValidation(String password);
+	
+	//username validation
+	public boolean usernameValidation(String username);
+	
+	//email validation
+	public boolean emailValidation(String email);
+	
 }

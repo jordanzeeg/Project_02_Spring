@@ -77,7 +77,7 @@ public class FriendController {
 //	public void getFriendByPostId(@PathVariable int postId, HttpServletResponse response) throws IOException{
 //			
 //	}
-	@PostMapping("/save")
+	@PostMapping()
 	public ResponseEntity<?> SaveFriend(@RequestBody Friend friend) { 
 		
 		service.save(friend);
@@ -86,7 +86,7 @@ public class FriendController {
 	}
 
 	
-	@PutMapping("/updatebyid{id}")
+	@PutMapping("/{id}")
 	public ResponseEntity<?> UpdateFriend(@PathVariable("id") int id,@RequestBody Friend friend) throws IOException {
 		if(friend.getId()!= id) {
 			return ResponseEntity.ok("friend id does not match id from path.");
@@ -100,7 +100,7 @@ public class FriendController {
 		return ResponseEntity.ok().body("Inserted Successfully");
 		}
 	}
-	@DeleteMapping("/deletebyid{id}")
+	@DeleteMapping("/{id}")
 	public ResponseEntity<?> DeleteFriend(@PathVariable("id") int id) { 
 		// assumption of a form of some kind
 		Friend friend = service.get(id);

@@ -20,7 +20,7 @@ public class Post {
 
     //TODO: - Add property for post url image(S3)
 
-    @ManyToMany(mappedBy = "posts")
+    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "posts")
     private List<Friend> taggedFriends;
 
     @OneToMany(mappedBy = "post")

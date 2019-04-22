@@ -31,7 +31,7 @@ public class Friend {
     private String email;
 
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "FRIEND_POST",
             joinColumns = {@JoinColumn(name = "friend_id")},
@@ -120,10 +120,12 @@ public class Friend {
 
 	
 	
-	  @Override public String toString() { return "Friend{" + "id=" + id +
-	  ", username='" + username + '\'' + ", password='" + password + '\'' +
-	  ", firstName='" + firstName + '\'' + ", lastName='" + lastName + '\'' +
-	  ", email='" + email + '\'' + '}'; }
+	  @Override public String toString() { return "{\n" + "\"id\":\"" + id + "\",\n" +
+	  " \"username\":\"" + username + '\"' + ",\n" +
+	  " \"password\":\"" + password + '\"' + ",\n" +
+	  " \"firstName\":\"" + firstName + '\"' + ",\n" +
+	  " \"lastName\":\"" + lastName + '\"' + ",\n" +
+	  " \"email\":\"" + email + '\"' + "\n" + '}'+ "\n" ; }
 	  
 	 
 }

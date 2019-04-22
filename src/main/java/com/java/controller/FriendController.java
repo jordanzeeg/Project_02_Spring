@@ -86,7 +86,7 @@ public class FriendController {
 	}
 
 	
-	@PutMapping("/{id}")
+	@PutMapping("/byid{id}")
 	public ResponseEntity<?> UpdateFriend(@PathVariable("id") int id,@RequestBody Friend friend) throws IOException {
 		if(friend.getId()!= id) {
 			return ResponseEntity.ok("friend id does not match id from path.");
@@ -100,7 +100,7 @@ public class FriendController {
 		return ResponseEntity.ok().body("Inserted Successfully");
 		}
 	}
-	@DeleteMapping("/{id}")
+	@DeleteMapping("/byid{id}")
 	public ResponseEntity<?> DeleteFriend(@PathVariable("id") int id) { 
 		// assumption of a form of some kind
 		Friend friend = service.get(id);

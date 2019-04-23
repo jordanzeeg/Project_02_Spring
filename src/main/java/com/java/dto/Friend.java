@@ -1,7 +1,5 @@
 package com.java.dto;
 
-import org.hibernate.mapping.Join;
-
 import javax.persistence.*;
 import java.util.List;
 
@@ -127,5 +125,5 @@ public class Friend {
 	  " \"lastName\":\"" + lastName + '\"' + ",\n" +
 	  " \"email\":\"" + email + '\"' + "\n" + '}'+ "\n" ; }
 	  
-	 
+	
 }

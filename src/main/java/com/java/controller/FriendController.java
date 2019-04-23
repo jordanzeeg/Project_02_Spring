@@ -37,7 +37,7 @@ public class FriendController {
 	
 	@GetMapping
 	@ResponseBody
-	public ResponseEntity<?> getFriends(HttpServletResponse response) throws IOException {
+	public ResponseEntity<?> getFriends() throws IOException {
 		
 		List<Friend> friends = service.getAll();
 
@@ -52,7 +52,7 @@ public class FriendController {
 
 		Friend friend = service.get(id);
 		if (friend == null) {
-			return ResponseEntity.ok().body("a friend with id: " + id+ "is not currently in database.");
+			return ResponseEntity.ok().body("a friend with id: " + id+ " is not currently in database.");
 		} else {
 			return ResponseEntity.ok().body(friend.toString());
 		}
@@ -62,7 +62,7 @@ public class FriendController {
 		// @Pathvariable sets the variable in the url to the parameter
 		
 		Friend friend = service.getByUsername(username);
-		if (friend == null) {
+		if (friend.getUsername() == null) {
 			return ResponseEntity.ok().body("a friend with username: " + username+ " is not currently in database.");
 		} else {
 			return ResponseEntity.ok().body(friend);
@@ -79,18 +79,24 @@ public class FriendController {
 //	}
 	@PostMapping()
 	public ResponseEntity<?> SaveFriend(@RequestBody Friend friend) { 
-		
+		Friend dataFriend = service.getByUsername(friend.getUsername());
+		if(dataFriend.getId()== 0) {
 		service.save(friend);
 		String username = friend.getUsername();
-		return ResponseEntity.ok().body("Friend saved with id = " + username);
+		return ResponseEntity.ok().body("Friend saved with username = " + username + " id = " + friend.getId());
+	}
+		else return ResponseEntity.ok("Friend already in database." + dataFriend);
 	}
 
 	
-	@PutMapping("/byid{id}")
-	public ResponseEntity<?> UpdateFriend(@PathVariable("id") int id,@RequestBody Friend friend) throws IOException {
-		if(friend.getId()!= id) {
-			return ResponseEntity.ok("friend id does not match id from path.");
-		}else if(service.get(friend.getId())== null) { //TODO ask people if null is what get actually returns
+	@PutMapping() //  "/byid{id}"
+	public ResponseEntity<?> UpdateFriend(@RequestBody Friend friend) throws IOException {
+		//@PathVariable("id")  int id,
+//		if(friend.getId()!= id) {
+//			return ResponseEntity.ok("friend id does not match id from path.");
+//		}
+		Friend dataFriend = service.getByUsername(friend.getUsername()); 
+		 if(dataFriend.getId() == 0) { //TODO ask people if null is what get actually returns
 			//response.getWriter().println("friend is not currently in database. save friend first");
 			return ResponseEntity.ok().body("friend is not currently in database. save friend first");
 		}else

@@ -7,70 +7,69 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
-
+import com.java.dto.Friend;
 import com.java.dto.Post;
 import com.java.service.FriendService;
 import com.java.service.PostService;
 
-@Controller
-@RequestMapping("/posts.do")
+@RestController
+@RequestMapping("/posts")
 public class PostController {
 	@Autowired 
 	PostService service;
 	
 	//TODO don't throw exception
+
 	@GetMapping
-	public void getPosts(HttpServletResponse response) throws IOException {
+	@ResponseBody
+	public ResponseEntity<?> getPosts() throws IOException {
 		
 		List<Post> posts = service.getAll();
-		response.getWriter().println(posts);
+
+		return ResponseEntity.ok(posts); //copied from video tutorial by b2 Tech
+		//return ResponseEntity.ok().body(responseString.toString()); 
 	}
 
 		//TODO don't throw exception
 	@GetMapping("/getpostsbyuser{id}") //pass in user id
-	public void GetPostsByUserId(@PathVariable int authorId, HttpServletResponse response) throws IOException {
+	public ResponseEntity<?> GetPostsByUserId(@PathVariable int authorId) {
 		List<Post> posts = service.getPostByAuthorId(authorId);
-		response.getWriter().println(posts);
+		return ResponseEntity.ok(posts);
 	}
 	
 		@GetMapping("/get/byid{id}") // sets variable as part of the url
-		public void getPostById(@PathVariable int id, HttpServletResponse response) throws IOException { 
-			// @Pathvariable sets the variable in the url to the parameter
+	public ResponseEntity<?> getPostById(@PathVariable int id) {
+		// @Pathvariable sets the variable in the url to the parameter
 
-			Post post = service.get(id);
-			if (post == null) {
-				response.getWriter().println("Post object not found");
-			} else {
-				try {
-					response.getWriter().println(post);
-				} catch (IOException e) {
-					response.getWriter().println("id not found");
-					e.printStackTrace();
-				}
-			}
-			}
+		Post post = service.get(id);
+		if (post == null) {
+			return ResponseEntity.ok("Post object not found");
+		} else {
+			return ResponseEntity.ok(post);
+
+		}
+	}
 		@GetMapping("/get/bytitle{title}") // sets variable as part of the url
 		public void getPostByUsername(@PathVariable String title, HttpServletResponse response) throws IOException { 
 			// @Pathvariable sets the variable in the url to the parameter
 
-			Post post = (Post) service.getPostByTitle(title);
+			List<Post> post = service.getPostByTitle(title);
 			if (post == null) {
-				response.getWriter().println("Post object not found");
+				ResponseEntity.ok("post not found");
 			} else {
-				try {
-					response.getWriter().println(post);
-				} catch (IOException e) {
-					response.getWriter().println("id not found");
-					e.printStackTrace();
-				}
+					ResponseEntity.ok(post);
 			}
 			// TODO don't throw exception
 
@@ -82,15 +81,26 @@ public class PostController {
 //		public void getPostByPostId(@PathVariable int postId, HttpServletResponse response) throws IOException{
 //				
 //		}
-		@PostMapping("/save")
-		public void SavePost(@Valid @ModelAttribute Post post, BindingResult result, HttpServletResponse response) throws IOException { 
-			// assumption of a form of some kind
-			if (result.hasErrors()) {
-				response.getWriter().println("Inserted unsuccessfully");
-			}
-			service.save(post);
-			response.getWriter().println("Inserted successfully");
-		}
+//		@PostMapping
+//		public void SavePost(@Valid @ModelAttribute Post post, BindingResult result, HttpServletResponse response) throws IOException { 
+//			// assumption of a form of some kind
+//			if (result.hasErrors()) {
+//				response.getWriter().println("Inserted unsuccessfully");
+//				
+//			}
+//			service.save(post);
+//			response.getWriter().println("Inserted successfully");
+//		}
+//		@PostMapping()
+//		public ResponseEntity<?> SaveFriend(@RequestBody Friend friend) { 
+//			Friend dataFriend = service.getByUsername(friend.getUsername());
+//			if(dataFriend.getId()== 0) {
+//			service.save(friend);
+//			String username = friend.getUsername();
+//			return ResponseEntity.ok().body("Friend saved with username = " + username + " id = " + friend.getId());
+//		}
+//			else return ResponseEntity.ok("Friend already in database." + dataFriend);
+//		}
 
 		
 		@PostMapping("/update")

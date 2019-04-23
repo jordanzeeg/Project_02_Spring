@@ -1,5 +1,7 @@
 package com.java.dto;
 
+import org.hibernate.mapping.Join;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -11,7 +13,8 @@ public class Friend {
     @Column(name = "id")
     private int id;
 
-    //private int salt;
+    @Column(name = "salt", nullable = false)
+    private String salt;
 
     @Column(name = "username", unique = true, nullable = false)
     private String username;
@@ -44,9 +47,9 @@ public class Friend {
     public Friend() {
     }
 
-    public Friend(String username, String password, String firstName, String lastName, String email,
+    public Friend(String username, String password, String salt, String firstName, String lastName, String email,
                   List<Post> posts) {
-        //this.salt = salt;
+        this.salt = salt;
         this.username = username;
         this.password = password;
         this.firstName = firstName;
@@ -57,73 +60,76 @@ public class Friend {
 
     // Getters and Setters
 
-	public int getId() {
-		return id;
-	}
+    public int getId() {
+        return id;
+    }
 
-	public void setId(int id) {
-		this.id = id;
-	}
+    public void setId(int id) {
+        this.id = id;
+    }
 
-	public String getUsername() {
-		return username;
-	}
+    public String getSalt() { return salt; }
 
-	public void setUsername(String username) {
-		this.username = username;
-	}
+    public void setSalt() { this.salt = salt; }
 
-	public String getPassword() {
-		return password;
-	}
+    public String getUsername() {
+        return username;
+    }
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
-	public String getFirstName() {
-		return firstName;
-	}
+    public String getPassword() {
+        return password;
+    }
 
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
-	public String getLastName() {
-		return lastName;
-	}
+    public String getFirstName() {
+        return firstName;
+    }
 
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
 
-	public String getEmail() {
-		return email;
-	}
+    public String getLastName() {
+        return lastName;
+    }
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
 
-	public List<Post> getPosts() {
-		return posts;
-	}
+    public String getEmail() {
+        return email;
+    }
 
-	public void setPosts(List<Post> posts) {
-		this.posts = posts;
-	}
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public List<Post> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(List<Post> posts) {
+        this.posts = posts;
+    }
 
 
     // Utility
 
-	
-	
-	  @Override public String toString() { return "{\n" + "\"id\":\"" + id + "\",\n" +
-	  " \"username\":\"" + username + '\"' + ",\n" +
-	  " \"password\":\"" + password + '\"' + ",\n" +
-	  " \"firstName\":\"" + firstName + '\"' + ",\n" +
-	  " \"lastName\":\"" + lastName + '\"' + ",\n" +
-	  " \"email\":\"" + email + '\"' + "\n" + '}'+ "\n" ; }
-	  
-	
+    @Override public String toString() { return "{\n" + "\"id\":\"" + id + "\",\n" +
+            " \"username\":\"" + username + '\"' + ",\n" +
+            " \"salt\":\"" + salt + '\"' + ",\n" +
+            " \"password\":\"" + password + '\"' + ",\n" +
+            " \"firstName\":\"" + firstName + '\"' + ",\n" +
+            " \"lastName\":\"" + lastName + '\"' + ",\n" +
+            " \"email\":\"" + email + '\"' + "\n" + '}'+ "\n" ; }
+
+
 }

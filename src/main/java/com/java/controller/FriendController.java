@@ -1,67 +1,66 @@
 package com.java.controller;
 
 import java.io.IOException;
-import java.io.PrintWriter;
+
 import java.util.List;
-
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
+
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+
 
 import com.java.dto.Friend;
 import com.java.service.FriendService;
 
-@Controller
-@RequestMapping("/friends.do")
+@RestController
+@RequestMapping("/friends")
 public class FriendController {
 	@Autowired
 	FriendService service;
 
+	
 	@GetMapping
-	public void getFriends(HttpServletResponse response) throws IOException {
+	@ResponseBody
+	public ResponseEntity<?> getFriends() throws IOException {
+		
 		List<Friend> friends = service.getAll();
-		response.getWriter().println(friends);
+
+		return ResponseEntity.ok(friends); //copied from video tutorial by b2 Tech
+		//return ResponseEntity.ok().body(responseString.toString()); 
 	}
-	@GetMapping("/get/byid{id}") // sets variable as part of the url
-	public void getFriendById(@PathVariable int id, HttpServletResponse response) throws IOException { 
+	
+	@GetMapping("/byid{id}") // sets variable as part of the url
+	
+	public ResponseEntity<?> getFriendById(@PathVariable("id") int id) throws IOException { 
 		// @Pathvariable sets the variable in the url to the parameter
 
 		Friend friend = service.get(id);
 		if (friend == null) {
-			response.getWriter().println("Friend object not found");
+			return ResponseEntity.ok().body("a friend with id: " + id+ " is not currently in database.");
 		} else {
-			try {
-				response.getWriter().println(friend);
-			} catch (IOException e) {
-				response.getWriter().println("id not found");
-				e.printStackTrace();
-			}
+			return ResponseEntity.ok().body(friend.toString());
 		}
 		}
-	@GetMapping("/get/byusername{username}") // sets variable as part of the url
-	public void getFriendByUsername(@PathVariable String username, HttpServletResponse response) throws IOException { 
+	@GetMapping("/byusername{username}") // sets variable as part of the url
+	public ResponseEntity<?> getFriendByUsername(@PathVariable String username) { 
 		// @Pathvariable sets the variable in the url to the parameter
-
+		
 		Friend friend = service.getByUsername(username);
-		if (friend == null) {
-			response.getWriter().println("Friend object not found");
+		if (friend.getUsername() == null) {
+			return ResponseEntity.ok().body("a friend with username: " + username+ " is not currently in database.");
 		} else {
-			try {
-				response.getWriter().println(friend);
-			} catch (IOException e) {
-				response.getWriter().println("id not found");
-				e.printStackTrace();
-			}
+			return ResponseEntity.ok().body(friend);
 		}
-		// TODO don't throw exception
+		
 
 		// TODO CRUD FRIENDS
 		// TODO getfriendbyname
@@ -71,45 +70,46 @@ public class FriendController {
 //	public void getFriendByPostId(@PathVariable int postId, HttpServletResponse response) throws IOException{
 //			
 //	}
-	@PostMapping("/save")
-	public void SaveFriend(@Valid @ModelAttribute Friend friend, BindingResult result, HttpServletResponse response) throws IOException { 
-		// assumption of a form of some kind
-		if (result.hasErrors()) {
-			response.getWriter().println("Inserted unsuccessfully");
-		}
+	@PostMapping()
+	public ResponseEntity<?> SaveFriend(@RequestBody Friend friend) { 
+		Friend dataFriend = service.getByUsername(friend.getUsername());
+		if(dataFriend.getId()== 0) {
 		service.save(friend);
-		response.getWriter().println("Inserted successfully");
+		String username = friend.getUsername();
+		return ResponseEntity.ok().body("Friend saved with username = " + username + " id = " + friend.getId());
+	}
+		else return ResponseEntity.ok("Friend already in database." + dataFriend);
 	}
 
 	
-	@PostMapping("/update")
-	public void UpdateFriend(@Valid @ModelAttribute Friend friend, BindingResult result, HttpServletResponse response) throws IOException {
-		// assumption of a form of some kind
-		if (result.hasErrors()) {
-			response.getWriter().println("Inserted unsuccessfully");
-		}
-		else if(service.get(friend.getId())== null) { //TODO ask people if null is what get actually returns
-			response.getWriter().println("friend is not currently in database. save friend first");
+	@PutMapping() //  "/byid{id}"
+	public ResponseEntity<?> UpdateFriend(@RequestBody Friend friend) throws IOException {
+		//@PathVariable("id")  int id,
+//		if(friend.getId()!= id) {
+//			return ResponseEntity.ok("friend id does not match id from path.");
+//		}
+		Friend dataFriend = service.getByUsername(friend.getUsername()); 
+		 if(dataFriend.getId() == 0) { //TODO ask people if null is what get actually returns
+			//response.getWriter().println("friend is not currently in database. save friend first");
+			return ResponseEntity.ok().body("friend is not currently in database. save friend first");
 		}else
 		{
 		service.update(friend);
-		response.getWriter().println("Inserted successfully");
+		//response.getWriter().println("Inserted successfully");
+		return ResponseEntity.ok().body("Inserted Successfully");
 		}
 	}
-	@PostMapping("/delete")
-	public void DeleteFriend(@Valid @ModelAttribute Friend friend, BindingResult result, HttpServletResponse response) throws IOException { 
+	@DeleteMapping("/byid{id}")
+	public ResponseEntity<?> DeleteFriend(@PathVariable("id") int id) { 
 		// assumption of a form of some kind
-		if (result.hasErrors()) {
-			response.getWriter().println("Deleted unsuccessfully");
-		}
-		else if(service.get(friend.getId())== null) { //TODO ask people if null is what get actually returns
-			response.getWriter().println("friend is not currently in database. create friend first");
+		Friend friend = service.get(id);
+		if(friend == null) { //TODO ask people if null is what get actually returns
+			return ResponseEntity.ok().body("friend not found to delete. Delete unsuccessful");
 		}else
 		{
 		service.delete(friend);
-		response.getWriter().println("Deleted successfully. They weren't really our friend anyway");
+		return ResponseEntity.ok().body("Deleted successfully. They weren't really our friend anyway");
 		}
 	}
 }
-
 

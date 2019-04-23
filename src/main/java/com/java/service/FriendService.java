@@ -53,53 +53,38 @@ public class FriendService implements FriendServiceInterface<Friend> {
 		dao.delete(t);	
 		LoggerSingleton.getLogger().info("DELETED a Friend object to database");
 	}
+	
 	public Friend getByUsername(String username) {
-		LoggerSingleton.getLogger().info("FETCHING Friend object based on username: "+username);
-		List<Friend> friends = getAll();
-		Friend friend =null;
-		for(int i = 0; i< friends.size();i++) {
-			if(friends.get(i).getUsername() == username) {
-				friend = friends.get(i);
-				LoggerSingleton.getLogger().info("Found friend in List by Username "+username);
-			}else {
-				LoggerSingleton.getLogger().info("Did not find friend in List by Username "+username);
-			}
-		}
-		LoggerSingleton.getLogger().info("FETCHED Friend object based on username: "+username);
+		LoggerSingleton.getLogger().info("FETCHING Friend object based on friendUsername: "+ username);
+		Friend friend = dao.getByUsername(username);
+		LoggerSingleton.getLogger().info("FETCHED Friend object based on friendUsername: "+ username);
+		LoggerSingleton.getLogger().info("FETCHED Friend object based on friendId: "+ friend.getId());
 		return friend;
 	}
 
-	@Override
-	public boolean usernameValidation(String username) {
-		List<Friend> friends = getAll();
-		for(int i = 0; i< friends.size();i++) {
-			if(username.equals(friends.get(i).getUsername())) {//if user name exist or match any on the db 
-				return true; //then return true
-			}
-		}
-		return false; //else return false, no username exist
-	}
+//	public Friend getByUsername(String username) {
+//		LoggerSingleton.getLogger().info("FETCHING Friend object based on username: "+username);
+//		List<Friend> friends = getAll();
+//		Friend friend = new Friend();
+//		for(int i = 0; i< friends.size();i++) {
+//			if(friends.get(i).getUsername() == username) {
+//				friend = storeFriend(friends.get(i));
+//				LoggerSingleton.getLogger().info("Found friend in List by Username "+username);
+//			}
+//		}	
+//		LoggerSingleton.getLogger().info("FETCHED Friend object based on username: "+username);
+//		return friend;
+//	}
 	
-	@Override
-	public boolean emailValidation(String email) {
-		List<Friend> friends = getAll();
-		for(int i = 0; i< friends.size();i++) {
-			if(email.equals(friends.get(i).getEmail())) {//if email exist or match any on the db
-				return true; //then return true
-			}
-		}
-		return false; // else return true, no email exist 
-	}
-
-	@Override
-	public boolean passwordValidation(String password) {
-		List<Friend> friends = getAll();
-		for(int i = 0; i< friends.size();i++) {
-			if(password.equals(friends.get(i).getPassword())) {//checking that username exist
-				//if(password.equals(friends.get(i).getPassword())) {//then check that password match
-					return true; //return true 
-				}	
-			}
-		return false;
-	}
+	 public Friend storeFriend(Friend friend) {
+		 Friend friend2 = new Friend();
+			friend2.setId(friend.getId());
+			friend2.setUsername(friend.getUsername());
+			friend2.setFirstName(friend.getFirstName());
+			friend2.setLastName(friend.getLastName());
+			friend2.setPassword(friend.getPassword());
+			friend2.setPosts(friend.getPosts());
+			friend2.setEmail(friend.getEmail());
+			return friend2;
+	 }
 }

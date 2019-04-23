@@ -2,9 +2,13 @@ package com.java.dao;
 
 import java.util.List;
 
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.ParameterExpression;
+import javax.persistence.criteria.Root;
 
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,21 +33,31 @@ public class FriendDao implements Dao<Friend> {
 	}
 	public Friend getByUsername(String username) {
 		Session s=sf.openSession();
-		Friend t = s.get(Friend.class, username);
+		  CriteriaBuilder cb = s.getCriteriaBuilder();
+		  s.beginTransaction();
+		  CriteriaQuery<Friend> q = cb.createQuery(Friend.class);
+		  Root<Friend> c = q.from(Friend.class);
+		  ParameterExpression<String> p = cb.parameter(String.class);
+		   q.select(c).where(cb.equal(c.get("username"), p));
+		   TypedQuery<Friend> query = s.createQuery(q);
+		   query.setParameter(p, username);
+		   Friend friend = query.getSingleResult();
+		   s.getTransaction().commit();
 		s.close();
-		return t;
+		return friend;
 	}
 	
 
 	@Override
 	public List<Friend> getAll() { //create the list using criteriaBuilder
 		Session session=sf.openSession();
-		
+		session.beginTransaction();
 		//Use nondeprecated things to do criteria
 		CriteriaBuilder builder = session.getCriteriaBuilder();
 		CriteriaQuery<Friend> criteriaQuery = builder.createQuery(Friend.class);
 		criteriaQuery.from(Friend.class);
 		List<Friend> list = session.createQuery(criteriaQuery).getResultList(); //call session 
+		session.getTransaction().commit();
 		session.close();
 		return list;
 	}

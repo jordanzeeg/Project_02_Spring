@@ -2,19 +2,19 @@ package com.java.dao;
 
 import java.util.List;
 
-
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 
-
-import com.java.util.LoggerSingleton;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Repository;
 
 import com.java.dto.Friend;
+import com.java.util.LoggerSingleton;
 
+@Repository
 public class FriendDao implements Dao<Friend> {
 	@Autowired
 	@Qualifier("sessionFactory")
@@ -24,6 +24,12 @@ public class FriendDao implements Dao<Friend> {
 	public Friend get(int id) {
 		Session s=sf.openSession();
 		Friend t = s.get(Friend.class, id);
+		s.close();
+		return t;
+	}
+	public Friend getByUsername(String username) {
+		Session s=sf.openSession();
+		Friend t = s.get(Friend.class, username);
 		s.close();
 		return t;
 	}

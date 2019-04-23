@@ -14,6 +14,8 @@ public class Friend {
     private int id;
 
     //private int salt;
+    @Column(name = "salt", nullable = false)
+    private String salt;
 
     @Column(name = "username", unique = true, nullable = false)
     private String username;
@@ -46,9 +48,9 @@ public class Friend {
     public Friend() {
     }
 
-    public Friend(String username, String password, String firstName, String lastName, String email,
+    public Friend(String username, String password, String salt, String firstName, String lastName, String email,
                   List<Post> posts) {
-        //this.salt = salt;
+        this.salt = salt;
         this.username = username;
         this.password = password;
         this.firstName = firstName;
@@ -66,6 +68,10 @@ public class Friend {
     public void setId(int id) {
         this.id = id;
     }
+
+    public String getSalt() { return salt; }
+
+    public void setSalt() { this.salt = salt; }
 
     public String getUsername() {
         return username;
@@ -124,6 +130,7 @@ public class Friend {
                 "id=" + id +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
+                ", salt='" + salt + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +

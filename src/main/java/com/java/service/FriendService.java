@@ -53,19 +53,38 @@ public class FriendService implements FriendServiceInterface<Friend> {
 		dao.delete(t);	
 		LoggerSingleton.getLogger().info("DELETED a Friend object to database");
 	}
+	
 	public Friend getByUsername(String username) {
-		LoggerSingleton.getLogger().info("FETCHING Friend object based on username: "+username);
-		List<Friend> friends = getAll();
-		Friend friend =null;
-		for(int i = 0; i< friends.size();i++) {
-			if(friends.get(i).getUsername() == username) {
-				friend = friends.get(i);
-				LoggerSingleton.getLogger().info("Found friend in List by Username "+username);
-			}else {
-				LoggerSingleton.getLogger().info("Did not find friend in List by Username "+username);
-			}
-		}
-		LoggerSingleton.getLogger().info("FETCHED Friend object based on username: "+username);
+		LoggerSingleton.getLogger().info("FETCHING Friend object based on friendUsername: "+ username);
+		Friend friend = dao.getByUsername(username);
+		LoggerSingleton.getLogger().info("FETCHED Friend object based on friendUsername: "+ username);
+		LoggerSingleton.getLogger().info("FETCHED Friend object based on friendId: "+ friend.getId());
 		return friend;
 	}
+	
+//	public Friend getByUsername(String username) {
+//		LoggerSingleton.getLogger().info("FETCHING Friend object based on username: "+username);
+//		List<Friend> friends = getAll();
+//		Friend friend = new Friend();
+//		for(int i = 0; i< friends.size();i++) {
+//			if(friends.get(i).getUsername() == username) {
+//				friend = storeFriend(friends.get(i));
+//				LoggerSingleton.getLogger().info("Found friend in List by Username "+username);
+//			}
+//		}	
+//		LoggerSingleton.getLogger().info("FETCHED Friend object based on username: "+username);
+//		return friend;
+//	}
+	
+	 public Friend storeFriend(Friend friend) {
+		 Friend friend2 = new Friend();
+			friend2.setId(friend.getId());
+			friend2.setUsername(friend.getUsername());
+			friend2.setFirstName(friend.getFirstName());
+			friend2.setLastName(friend.getLastName());
+			friend2.setPassword(friend.getPassword());
+			friend2.setPosts(friend.getPosts());
+			friend2.setEmail(friend.getEmail());
+			return friend2;
+	 }
 }

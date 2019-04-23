@@ -12,7 +12,7 @@ public class Post {
     @Column(name = "id")
     private int id;
 
-    @Column(name = "description")
+	@Column(name = "description")
     private String description;
 
     @Column(name = "title")
@@ -20,7 +20,7 @@ public class Post {
 
     //TODO: - Add property for post url image(S3)
 
-    @ManyToMany(mappedBy = "posts")
+    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "posts")
     private List<Friend> taggedFriends;
 
     @OneToMany(mappedBy = "post")
@@ -33,8 +33,7 @@ public class Post {
     private Timestamp timestamp;
 
     // Constructors
-
-    public Post() {
+	public Post() {
     }
 
     public Post(String description, String title, List<Friend> taggedFriends, List<Comment> comments,
@@ -61,4 +60,61 @@ public class Post {
                 ", timestamp='" + timestamp + '\'' +
                 '}';
     }
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public List<Friend> getTaggedFriends() {
+		return taggedFriends;
+	}
+
+	public void setTaggedFriends(List<Friend> taggedFriends) {
+		this.taggedFriends = taggedFriends;
+	}
+
+	public List<Comment> getComments() {
+		return comments;
+	}
+
+	public void setComments(List<Comment> comments) {
+		this.comments = comments;
+	}
+
+	public List<PostLike> getPostLikes() {
+		return postLikes;
+	}
+
+	public void setPostLikes(List<PostLike> postLikes) {
+		this.postLikes = postLikes;
+	}
+
+	public Timestamp getTimestamp() {
+		return timestamp;
+	}
+
+	public void setTimestamp(Timestamp timestamp) {
+		this.timestamp = timestamp;
+	}
+   
 }

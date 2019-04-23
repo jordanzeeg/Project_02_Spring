@@ -13,7 +13,6 @@ public class Friend {
     @Column(name = "id")
     private int id;
 
-    //private int salt;
     @Column(name = "salt", nullable = false)
     private String salt;
 
@@ -33,7 +32,7 @@ public class Friend {
     private String email;
 
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "FRIEND_POST",
             joinColumns = {@JoinColumn(name = "friend_id")},
@@ -124,17 +123,13 @@ public class Friend {
 
     // Utility
 
-    @Override
-    public String toString() {
-        return "Friend{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", salt='" + salt + '\'' +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", email='" + email + '\'' +
-                ", posts=" + posts +
-                '}';
-    }
+    @Override public String toString() { return "{\n" + "\"id\":\"" + id + "\",\n" +
+            " \"username\":\"" + username + '\"' + ",\n" +
+            " \"salt\":\"" + salt + '\"' + ",\n" +
+            " \"password\":\"" + password + '\"' + ",\n" +
+            " \"firstName\":\"" + firstName + '\"' + ",\n" +
+            " \"lastName\":\"" + lastName + '\"' + ",\n" +
+            " \"email\":\"" + email + '\"' + "\n" + '}'+ "\n" ; }
+
+
 }

@@ -22,7 +22,7 @@ import com.java.service.CommentService;
 
 
 @Controller
-@RequestMapping("/comments.do")
+@RequestMapping("/comments")
 public class CommentController {
 	@Autowired
 	CommentService service;

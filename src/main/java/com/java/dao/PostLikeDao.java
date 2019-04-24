@@ -8,39 +8,41 @@ import javax.persistence.criteria.CriteriaQuery;
 
 import org.hibernate.Session;
 
-import com.java.dto.CommentLike;
+import com.java.dto.PostLike;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Repository;
 
-public class PostLikeDao implements Dao<CommentLike> {
+@Repository
+public class PostLikeDao implements Dao<PostLike> {
 	@Autowired
 	@Qualifier("sessionFactory")
 	SessionFactory sf;
 
 	@Override
-	public CommentLike get(int id) {
+	public PostLike get(int id) {
 		Session s=sf.openSession();
-		CommentLike t = s.get(CommentLike.class, id);
+		PostLike t = s.get(PostLike.class, id);
 		s.close();
 		return t;
 	}
 
 	@Override
-	public List<CommentLike> getAll() {
+	public List<PostLike> getAll() {
 		Session session=sf.openSession();
 		
 		//Use nondeprecated things to do criteria
 		CriteriaBuilder builder = session.getCriteriaBuilder();
-		CriteriaQuery<CommentLike> criteriaQuery = builder.createQuery(CommentLike.class);
-		criteriaQuery.from(CommentLike.class);
-		List<CommentLike> list = session.createQuery(criteriaQuery).getResultList(); //call session 
+		CriteriaQuery<PostLike> criteriaQuery = builder.createQuery(PostLike.class);
+		criteriaQuery.from(PostLike.class);
+		List<PostLike> list = session.createQuery(criteriaQuery).getResultList(); //call session 
 		session.close();
 		return list;
 	}
 
 	@Override
-	public void save(CommentLike t) {
+	public void save(PostLike t) {
 		Session s =sf.openSession();
 		s.beginTransaction();
 		s.save(t);
@@ -49,7 +51,7 @@ public class PostLikeDao implements Dao<CommentLike> {
 	}
 
 	@Override
-	public void update(CommentLike t) {
+	public void update(PostLike t) {
 		Session s = sf.openSession();
 		s.beginTransaction();
 		s.update(t);
@@ -59,7 +61,7 @@ public class PostLikeDao implements Dao<CommentLike> {
 	}
 
 	@Override
-	public void delete(CommentLike t) {
+	public void delete(PostLike t) {
 		Session s=sf.openSession();
 		s.beginTransaction();
 		s.delete(t);

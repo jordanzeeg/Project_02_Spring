@@ -1,20 +1,23 @@
 package com.java.dto;
 
 import javax.persistence.*;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
+@Entity
 public class Post {
     @Id
     @GeneratedValue
     @Column(name = "id")
     private int id;
 
-    @ManyToOne
-    @JoinColumn(name = "friend_id", nullable = false)
-    private Friend owner;
-
-    @Column(name = "description")
+	@Column(name = "description")
     private String description;
 
     @Column(name = "title")
@@ -22,29 +25,32 @@ public class Post {
 
     //TODO: - Add property for post url image(S3)
 
-    @OneToMany(mappedBy = "post")
-    private List<Friend> taggedFriends;
+    @ManyToMany( mappedBy = "posts", cascade = { CascadeType.PERSIST,
+    											CascadeType.MERGE})
+    
+    private List<Friend> friends;
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany( mappedBy = "post", cascade = { CascadeType.ALL })
+    @LazyCollection(LazyCollectionOption.FALSE)
     private List<Comment> comments;
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany( mappedBy = "post", cascade = { CascadeType.ALL })
+    @LazyCollection(LazyCollectionOption.FALSE)
     private List<PostLike> postLikes;
 
     @Column(name = "timestamp")
-    private String timestamp;
+    @CreationTimestamp
+    private Timestamp timestamp;
 
     // Constructors
-
-    public Post() {
+	public Post() {
     }
 
-    public Post(Friend owner, String description, String title, List<Friend> taggedFriends, List<Comment> comments,
-                List<PostLike> postLikes, String timestamp) {
-        this.owner = owner;
+    public Post(String description, String title, List<Friend> friends, List<Comment> comments,
+                List<PostLike> postLikes, Timestamp timestamp) {
         this.description = description;
         this.title = title;
-        this.taggedFriends = taggedFriends;
+        this.friends = friends;
         this.comments = comments;
         this.postLikes = postLikes;
         this.timestamp = timestamp;
@@ -54,15 +60,71 @@ public class Post {
 
     @Override
     public String toString() {
-        return "Post{" +
-                "id=" + id +
-                ", owner=" + owner +
-                ", description='" + description + '\'' +
-                ", title='" + title + '\'' +
-                ", taggedFriends=" + taggedFriends +
-                ", comments=" + comments +
-                ", postLikes=" + postLikes +
-                ", timestamp='" + timestamp + '\'' +
-                '}';
+        return "{\n" +
+                "\"id:\"\"" + id + '\"' + ",\n" +
+                "\"description='" + description + '\"' + ",\n" +
+                "\"title='" + title + '\"' + ",\n" +
+                "\"friends=" + friends + '\"' + ",\n" +
+                "\"comments=" + comments + '\"' + ",\n" +
+                "\"postLikes=" + postLikes + '\"' + ",\n" +
+                "\"timestamp='" + timestamp +'\"' + "\n" + '}'+ "\n" ; 
     }
+   
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public List<Friend> getFriends() {
+		return friends;
+	}
+
+	public void setFriends(List<Friend> friends) {
+		this.friends = friends;
+	}
+
+	public List<Comment> getComments() {
+		return comments;
+	}
+
+	public void setComments(List<Comment> comments) {
+		this.comments = comments;
+	}
+
+	public List<PostLike> getPostLikes() {
+		return postLikes;
+	}
+
+	public void setPostLikes(List<PostLike> postLikes) {
+		this.postLikes = postLikes;
+	}
+
+	public Timestamp getTimestamp() {
+		return timestamp;
+	}
+
+	public void setTimestamp(Timestamp timestamp) {
+		this.timestamp = timestamp;
+	}
+   
 }

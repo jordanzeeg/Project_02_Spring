@@ -1,6 +1,6 @@
 package com.java.dto;
 
-import java.util.Date;
+import java.sql.Timestamp;
 import java.util.List;
 
 import javax.persistence.*;
@@ -8,7 +8,7 @@ import javax.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 @Entity
-@Table(name = "COMMENT")
+@Table(name = "comment_tbl")
 public class Comment {
     @Id
     @GeneratedValue
@@ -28,21 +28,21 @@ public class Comment {
 
     @Column(name = "timestamp")
     @CreationTimestamp
-    private Date date;
+    private Timestamp timestamp;
 
     @OneToMany(mappedBy = "comment")
-    private List<CommentLike> likes;
+    private List<CommentLike> commentlikes;
 
     // Constructors
     public Comment() {
     }
 
-    public Comment(String description, Friend author, Post post, Date date, List<CommentLike> likes) {
+    public Comment(String description, Friend author, Post post, Timestamp timestamp, List<CommentLike> likes) {
         this.description = description;
         this.author = author;
         this.post = post;
-        this.date = date;
-        this.likes = likes;
+        this.timestamp = timestamp;
+        this.commentlikes = likes;
     }
 
     // Getters and Setters
@@ -78,20 +78,20 @@ public class Comment {
         this.post = post;
     }
 
-    public Date getDate() {
-        return date;
+    public Timestamp getTimestamp() {
+        return timestamp;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setTimestamp(Timestamp timestamp) {
+        this.timestamp = timestamp;
     }
 
-    public List<CommentLike> getLikes() {
-        return likes;
+    public List<CommentLike> getCommentLikes() {
+        return commentlikes;
     }
 
-    public void setLikes(List<CommentLike> likes) {
-        this.likes = likes;
+    public void setCommentLikes(List<CommentLike> likes) {
+        this.commentlikes = likes;
     }
 
     // Utility
@@ -102,8 +102,8 @@ public class Comment {
                 ", description='" + description + '\'' +
                 ", author=" + author +
                 ", post=" + post +
-                ", date=" + date +
-                ", likes=" + likes +
+                ", timestamp=" + timestamp +
+                ", likes=" + commentlikes +
                 '}';
     }
 }

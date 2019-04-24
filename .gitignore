@@ -44,6 +44,8 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
-/FaceYourBookSpace.iml
-
+<<<<<<< HEAD
 /target/
+=======
+/FaceYourBookSpace.iml
+>>>>>>> e7a78fa99cf714a21a63187802582e545fc6e6c3

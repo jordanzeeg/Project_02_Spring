@@ -1,5 +1,7 @@
 package com.java.dto;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.hibernate.mapping.Join;
 
 import javax.persistence.*;
@@ -32,12 +34,13 @@ public class Friend {
     private String email;
 
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany( cascade = { CascadeType.ALL })
     @JoinTable(
             name = "FRIEND_POST",
             joinColumns = {@JoinColumn(name = "friend_id")},
             inverseJoinColumns = {@JoinColumn(name = "post_id")}
     )
+    @LazyCollection(LazyCollectionOption.FALSE)
     private List<Post> posts;
 
     //TODO: - add property for profile pic (S3)

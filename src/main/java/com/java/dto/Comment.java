@@ -8,7 +8,7 @@ import javax.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 @Entity
-@Table(name = "COMMENT")
+@Table(name = "comment_tbl")
 public class Comment {
     @Id
     @GeneratedValue

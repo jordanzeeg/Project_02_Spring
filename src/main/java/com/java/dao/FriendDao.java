@@ -13,6 +13,7 @@ import javax.persistence.criteria.Root;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
@@ -84,9 +85,9 @@ public class FriendDao implements Dao<Friend> {
 	public void save(Friend t) {
 		LoggerSingleton.getLogger().info("In the save method");
 		Session s =sf.openSession();
-		s.beginTransaction();
+		Transaction trans = s.beginTransaction();
 		s.save(t);
-		s.getTransaction().commit();
+		trans.commit();
 		s.close();
 	}
 

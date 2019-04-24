@@ -46,7 +46,7 @@ public class PostController {
 	}
 
 	// TODO don't throw exception
-	@GetMapping("/getpostsbyuser{id}") // pass in user id
+	@GetMapping("/getpostsbyuser{authorId}") // pass in user id
 	public ResponseEntity<?> GetPostsByUserId(@PathVariable int authorId) {
 		List<Post> posts = new ArrayList<Post>();
 		posts = service.getPostByAuthorId(authorId);
@@ -120,7 +120,7 @@ public class PostController {
 	public ResponseEntity<?> DeletePost(@RequestBody Post post) {
 		// assumption of a form of some kind
 
-		if (service.get(post.getId()).getId() == 0) { // TODO ask people if null is what get actually returns
+		if (post.getId()==0) { // TODO ask people if null is what get actually returns
 			return ResponseEntity.ok("post is not currently in database. create post first");
 		} else {
 			service.delete(post);

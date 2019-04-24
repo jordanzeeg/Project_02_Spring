@@ -34,7 +34,7 @@ public class FriendService implements FriendServiceInterface<Friend> {
 
 	@Override
 	public void save(Friend t) {
-		LoggerSingleton.getLogger().info("SAVING a Friend object to database");
+		LoggerSingleton.getLogger().info("SAVING a Friend object to database" + t);
 		dao.save(t);
 		LoggerSingleton.getLogger().info("SAVED a Friend object to database");
 		

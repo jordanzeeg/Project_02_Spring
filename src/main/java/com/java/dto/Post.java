@@ -50,16 +50,16 @@ public class Post {
 
     @Override
     public String toString() {
-        return "Post{" +
-                "id=" + id +
-                ", description='" + description + '\'' +
-                ", title='" + title + '\'' +
-                ", taggedFriends=" + taggedFriends +
-                ", comments=" + comments +
-                ", postLikes=" + postLikes +
-                ", timestamp='" + timestamp + '\'' +
-                '}';
+        return "{\n" +
+                "\"id:\"\"" + id + '\"' + ",\n" +
+                "\"description='" + description + '\"' + ",\n" +
+                "\"title='" + title + '\"' + ",\n" +
+                "\"taggedFriends=" + taggedFriends + '\"' + ",\n" +
+                "\"comments=" + comments + '\"' + ",\n" +
+                "\"postLikes=" + postLikes + '\"' + ",\n" +
+                "\"timestamp='" + timestamp +'\"' + "\n" + '}'+ "\n" ; 
     }
+   
 
 	public int getId() {
 		return id;

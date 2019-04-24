@@ -1,8 +1,9 @@
 package com.java.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
-
+import javax.persistence.NoResultException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 import com.java.dto.Post;
+import com.java.util.LoggerSingleton;
 
 @Repository
 public class PostDao implements Dao<Post> {
@@ -31,12 +33,18 @@ public class PostDao implements Dao<Post> {
 	@Override
 	public List<Post> getAll() {
 		Session session=sf.openSession();
-		
+		List<Post> list = new ArrayList<Post>();
 		//Use nondeprecated things to do criteria
 		CriteriaBuilder builder = session.getCriteriaBuilder();
 		CriteriaQuery<Post> criteriaQuery = builder.createQuery(Post.class);
 		criteriaQuery.from(Post.class);
-		List<Post> list = session.createQuery(criteriaQuery).getResultList(); //call session 
+		try {
+		list = session.createQuery(criteriaQuery).getResultList(); //call session 
+		LoggerSingleton.getLogger().info(" list created in PostDao.getAll() "+ list  );
+		}
+		catch(NoResultException e){
+			LoggerSingleton.getLogger().info("Empty list created in PostDao.getAll()" );	
+		}
 		session.close();
 		return list;
 	}
@@ -64,5 +72,6 @@ public class PostDao implements Dao<Post> {
 		s.getTransaction().commit();
 		s.close();		
 	}
+	
 
 }

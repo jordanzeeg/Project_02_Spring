@@ -1,6 +1,7 @@
 package com.java.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -47,7 +48,8 @@ public class PostController {
 	// TODO don't throw exception
 	@GetMapping("/getpostsbyuser{id}") // pass in user id
 	public ResponseEntity<?> GetPostsByUserId(@PathVariable int authorId) {
-		List<Post> posts = service.getPostByAuthorId(authorId);
+		List<Post> posts = new ArrayList<Post>();
+		posts = service.getPostByAuthorId(authorId);
 		return ResponseEntity.ok(posts);
 	}
 
@@ -57,7 +59,7 @@ public class PostController {
 
 		Post post = service.get(id);
 		if (post == null) {
-			return ResponseEntity.ok("Post object not found");
+			return ResponseEntity.ok(0);
 		} else {
 			return ResponseEntity.ok(post);
 
@@ -67,13 +69,11 @@ public class PostController {
 	@GetMapping("/get/bytitle{title}") // sets variable as part of the url
 	public void getPostByUsername(@PathVariable String title, HttpServletResponse response) throws IOException {
 		// @Pathvariable sets the variable in the url to the parameter
-
+		
 		List<Post> post = service.getPostByTitle(title);
-		if (post == null) {
-			ResponseEntity.ok("post not found");
-		} else {
+	
 			ResponseEntity.ok(post);
-		}
+		
 		// TODO don't throw exception
 
 		// TODO CRUD FRIENDS
@@ -97,19 +97,17 @@ public class PostController {
 //		}
 	@PostMapping()
 	public ResponseEntity<?> SavePost(@RequestBody Post post) {
-		Post dataPost = service.get(post.getId());
-		if (dataPost == null) {
+		if (post.getId() == 0) {
 			service.save(post);
-			String title = post.getTitle();
-			return ResponseEntity.ok().body("Post saved with Title = " + title + " id = " + post.getId());
+			
+			return ResponseEntity.ok().body("Post saved with Title = " + post.getTitle() + " id = " + post.getId());
 		} else
-			return ResponseEntity.ok("Friend already in database. " + dataPost);
+			return ResponseEntity.ok(0); 
 	}
 
 	@PutMapping
 	public ResponseEntity<?> UpdatePost(@RequestBody Post post) {
 		// assumption of a form of some kind
-		Post dataPost = service.get(id);
 		if (service.get(post.getId()).getId() == 0) { // TODO ask people if null is what get actually returns
 			return ResponseEntity.ok("post is not currently in database. save post first");
 		} else {

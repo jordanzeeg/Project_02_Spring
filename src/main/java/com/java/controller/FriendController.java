@@ -1,19 +1,10 @@
 package com.java.controller;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
+
 import java.util.List;
-import java.util.ListIterator;
-
-import javax.servlet.http.HttpServletResponse;
-
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -22,8 +13,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+
 
 import com.java.dto.Friend;
 import com.java.service.FriendService;
@@ -117,6 +110,46 @@ public class FriendController {
 		service.delete(friend);
 		return ResponseEntity.ok().body("Deleted successfully. They weren't really our friend anyway");
 		}
+	}
+	
+	/*
+	 * 
+	 *  
+	 *  
+	 *  
+	 *  
+	 *  
+	 *  Testing Testing by Poho */
+	@PostMapping("/register")
+	public ResponseEntity<?> registerFriend(@RequestBody Friend friend) {
+		Friend dataFriend = service.getUsername(friend.getUsername());
+		Friend emailFriend = service.getEmail(friend.getEmail());
+		if (dataFriend != null) {
+			return ResponseEntity.ok().body("Username already existed. Please use a different username");
+		}
+		if (emailFriend != null) {
+			return ResponseEntity.ok().body("Email already existed. Please use a different email");
+		}
+		service.save(friend);
+		String username = friend.getUsername();
+		return ResponseEntity.ok().body("Friend saved with username = " + username + " id = " + friend.getId());
+		// }
+		// else return ResponseEntity.ok("Friend already in database." + dataFriend);
+	}
+
+	@PostMapping("/login")
+	public ResponseEntity<?> loginTrial(@RequestBody Friend friend) {
+		Friend dataFriend = service.getUsername(friend.getUsername());// info from db
+		if (dataFriend == null) {
+			return ResponseEntity.ok("Login Trial Fail. UserName/Password Not match");
+		} else if ((friend.getUsername().equals(dataFriend.getUsername()))) {
+			if (service.passwordValidation(friend.getUsername(), friend.getPassword())) {
+				// String username = friend.getUsername();
+				return ResponseEntity.ok().body("Login Trial Success with username: " + dataFriend.getUsername());
+			}
+		}
+		return ResponseEntity.ok("Login Trial Fail. UserName/Password Not match");
+
 	}
 }
 

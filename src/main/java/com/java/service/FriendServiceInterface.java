@@ -29,4 +29,5 @@ public interface FriendServiceInterface<T> {
 	//delete a Friend/user object that currently exists
 	public void delete(Friend t);
 	
+	
 }

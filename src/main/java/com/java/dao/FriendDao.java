@@ -10,6 +10,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.ParameterExpression;
 import javax.persistence.criteria.Root;
 
+
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -38,7 +39,8 @@ public class FriendDao implements Dao<Friend> {
 		Friend friend = new Friend();
 		Session s=sf.openSession();
 		  CriteriaBuilder cb = s.getCriteriaBuilder();
-		  s.beginTransaction();
+		  s.beginTransaction(); //original
+
 		  CriteriaQuery<Friend> q = cb.createQuery(Friend.class);
 		  Root<Friend> c = q.from(Friend.class);
 		  ParameterExpression<String> p = cb.parameter(String.class);
@@ -52,6 +54,7 @@ public class FriendDao implements Dao<Friend> {
 			   LoggerSingleton.getLogger().info("Empty list created in FriendDao.getByUsername()" );
 		   }
 		   s.getTransaction().commit();
+
 		s.close();
 
 		return friend;
@@ -85,9 +88,13 @@ public class FriendDao implements Dao<Friend> {
 	public void save(Friend t) {
 		LoggerSingleton.getLogger().info("In the save method");
 		Session s =sf.openSession();
-		Transaction trans = s.beginTransaction();
+
+		Transaction tx = s.beginTransaction(); //changed by Poho
+		//s.beginTransaction(); original
 		s.save(t);
-		trans.commit();
+		//s.getTransaction().commit(); //original
+		tx.commit(); //changed by Poho
+
 		s.close();
 	}
 

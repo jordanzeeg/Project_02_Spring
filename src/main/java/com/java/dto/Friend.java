@@ -73,7 +73,7 @@ public class Friend {
 
     public String getSalt() { return salt; }
 
-    public void setSalt() { this.salt = salt; }
+
 
     public String getUsername() {
         return username;
@@ -126,6 +126,7 @@ public class Friend {
 
     // Utility
 
+
     @Override public String toString() { return "{\n" + "\"id\":\"" + id + "\",\n" +
             " \"username\":\"" + username + '\"' + ",\n" +
             " \"salt\":\"" + salt + '\"' + ",\n" +
@@ -134,5 +135,19 @@ public class Friend {
             " \"lastName\":\"" + lastName + '\"' + ",\n" +
             " \"email\":\"" + email + '\"' + "\n" + '}'+ "\n" ; }
 
+	//new thing added by Poho
+    public void setSalt(String salt2) {
+		this.salt=salt2;
+		
+	}
+
+    public Friend(String username, String password, String salt, String firstName, String lastName, String email) {
+  this.username = username;
+  this.password = password;
+  this.firstName = firstName;
+  this.lastName = lastName;
+  this.email = email;
+  this.salt = salt;
+}
 
 }

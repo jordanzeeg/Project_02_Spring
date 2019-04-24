@@ -111,5 +111,45 @@ public class FriendController {
 		return ResponseEntity.ok().body("Deleted successfully. They weren't really our friend anyway");
 		}
 	}
+	
+	/*
+	 * 
+	 *  
+	 *  
+	 *  
+	 *  
+	 *  
+	 *  Testing Testing by Poho */
+	@PostMapping("/register")
+	public ResponseEntity<?> registerFriend(@RequestBody Friend friend) {
+		Friend dataFriend = service.getUsername(friend.getUsername());
+		Friend emailFriend = service.getEmail(friend.getEmail());
+		if (dataFriend != null) {
+			return ResponseEntity.ok().body("Username already existed. Please use a different username");
+		}
+		if (emailFriend != null) {
+			return ResponseEntity.ok().body("Email already existed. Please use a different email");
+		}
+		service.save(friend);
+		String username = friend.getUsername();
+		return ResponseEntity.ok().body("Friend saved with username = " + username + " id = " + friend.getId());
+		// }
+		// else return ResponseEntity.ok("Friend already in database." + dataFriend);
+	}
+
+	@PostMapping("/login")
+	public ResponseEntity<?> loginTrial(@RequestBody Friend friend) {
+		Friend dataFriend = service.getUsername(friend.getUsername());// info from db
+		if (dataFriend == null) {
+			return ResponseEntity.ok("Login Trial Fail. UserName/Password Not match");
+		} else if ((friend.getUsername().equals(dataFriend.getUsername()))) {
+			if (service.passwordValidation(friend.getUsername(), friend.getPassword())) {
+				// String username = friend.getUsername();
+				return ResponseEntity.ok().body("Login Trial Success with username: " + dataFriend.getUsername());
+			}
+		}
+		return ResponseEntity.ok("Login Trial Fail. UserName/Password Not match");
+
+	}
 }
 

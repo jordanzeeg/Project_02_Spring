@@ -132,6 +132,19 @@ public class Friend {
             " \"lastName\":\"" + lastName + '\"' + ",\n" +
             " \"email\":\"" + email + '\"' + "\n" + '}'+ "\n" ; }
 
+	//new thing added by Poho
+    public void setSalt(String salt2) {
+		this.salt=salt2;
+		
+	}
 
+    public Friend(String username, String password, String salt, String firstName, String lastName, String email) {
+  this.username = username;
+  this.password = password;
+  this.firstName = firstName;
+  this.lastName = lastName;
+  this.email = email;
+  this.salt = salt;
+}
 
 }

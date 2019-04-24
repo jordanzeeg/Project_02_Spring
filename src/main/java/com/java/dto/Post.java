@@ -1,6 +1,11 @@
 package com.java.dto;
 
 import javax.persistence.*;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -19,27 +24,32 @@ public class Post {
 
     //TODO: - Add property for post url image(S3)
 
-    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "posts")
-    private List<Friend> taggedFriends;
+    @ManyToMany( mappedBy = "posts", cascade = { CascadeType.PERSIST,
+    											CascadeType.MERGE})
+    
+    private List<Friend> friends;
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany( mappedBy = "post", cascade = { CascadeType.ALL })
+    @LazyCollection(LazyCollectionOption.FALSE)
     private List<Comment> comments;
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany( mappedBy = "post", cascade = { CascadeType.ALL })
+    @LazyCollection(LazyCollectionOption.FALSE)
     private List<PostLike> postLikes;
 
     @Column(name = "timestamp")
+    @CreationTimestamp
     private Timestamp timestamp;
 
     // Constructors
 	public Post() {
     }
 
-    public Post(String description, String title, List<Friend> taggedFriends, List<Comment> comments,
+    public Post(String description, String title, List<Friend> friends, List<Comment> comments,
                 List<PostLike> postLikes, Timestamp timestamp) {
         this.description = description;
         this.title = title;
-        this.taggedFriends = taggedFriends;
+        this.friends = friends;
         this.comments = comments;
         this.postLikes = postLikes;
         this.timestamp = timestamp;
@@ -49,16 +59,16 @@ public class Post {
 
     @Override
     public String toString() {
-        return "Post{" +
-                "id=" + id +
-                ", description='" + description + '\'' +
-                ", title='" + title + '\'' +
-                ", taggedFriends=" + taggedFriends +
-                ", comments=" + comments +
-                ", postLikes=" + postLikes +
-                ", timestamp='" + timestamp + '\'' +
-                '}';
+        return "{\n" +
+                "\"id:\"\"" + id + '\"' + ",\n" +
+                "\"description='" + description + '\"' + ",\n" +
+                "\"title='" + title + '\"' + ",\n" +
+                "\"friends=" + friends + '\"' + ",\n" +
+                "\"comments=" + comments + '\"' + ",\n" +
+                "\"postLikes=" + postLikes + '\"' + ",\n" +
+                "\"timestamp='" + timestamp +'\"' + "\n" + '}'+ "\n" ; 
     }
+   
 
 	public int getId() {
 		return id;
@@ -84,12 +94,12 @@ public class Post {
 		this.title = title;
 	}
 
-	public List<Friend> getTaggedFriends() {
-		return taggedFriends;
+	public List<Friend> getFriends() {
+		return friends;
 	}
 
-	public void setTaggedFriends(List<Friend> taggedFriends) {
-		this.taggedFriends = taggedFriends;
+	public void setFriends(List<Friend> friends) {
+		this.friends = friends;
 	}
 
 	public List<Comment> getComments() {

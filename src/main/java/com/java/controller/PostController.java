@@ -1,6 +1,7 @@
 package com.java.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -8,22 +9,21 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.java.dto.Friend;
 import com.java.dto.Post;
-import com.java.service.FriendService;
 import com.java.service.PostService;
 
 @RestController
@@ -44,10 +44,13 @@ public class PostController {
 		// return ResponseEntity.ok().body(responseString.toString());
 	}
 
+
 	// TODO don't throw exception
-	@GetMapping("/getpostsbyuser{id}") // pass in user id
+	@GetMapping("/getpostsbyuser{authorId}") // pass in user id
+
 	public ResponseEntity<?> GetPostsByUserId(@PathVariable int authorId) {
-		List<Post> posts = service.getPostByAuthorId(authorId);
+		List<Post> posts = new ArrayList<Post>();
+		posts = service.getPostByAuthorId(authorId);
 		return ResponseEntity.ok(posts);
 	}
 
@@ -57,7 +60,7 @@ public class PostController {
 
 		Post post = service.get(id);
 		if (post == null) {
-			return ResponseEntity.ok("Post object not found");
+			return ResponseEntity.ok(0);
 		} else {
 			return ResponseEntity.ok(post);
 
@@ -67,13 +70,11 @@ public class PostController {
 	@GetMapping("/get/bytitle{title}") // sets variable as part of the url
 	public void getPostByUsername(@PathVariable String title, HttpServletResponse response) throws IOException {
 		// @Pathvariable sets the variable in the url to the parameter
-
+		
 		List<Post> post = service.getPostByTitle(title);
-		if (post == null) {
-			ResponseEntity.ok("post not found");
-		} else {
+	
 			ResponseEntity.ok(post);
-		}
+		
 		// TODO don't throw exception
 
 		// TODO CRUD FRIENDS
@@ -97,19 +98,17 @@ public class PostController {
 //		}
 	@PostMapping()
 	public ResponseEntity<?> SavePost(@RequestBody Post post) {
-		Post dataPost = service.get(post.getId());
-		if (dataPost == null) {
+		if (post.getId() == 0) {
 			service.save(post);
-			String title = post.getTitle();
-			return ResponseEntity.ok().body("Post saved with Title = " + title + " id = " + post.getId());
+			
+			return ResponseEntity.ok().body("Post saved with Title = " + post.getTitle() + " id = " + post.getId());
 		} else
-			return ResponseEntity.ok("Friend already in database. " + dataPost);
+			return ResponseEntity.ok(0); 
 	}
 
 	@PutMapping
 	public ResponseEntity<?> UpdatePost(@RequestBody Post post) {
 		// assumption of a form of some kind
-		Post dataPost = service.get(id);
 		if (service.get(post.getId()).getId() == 0) { // TODO ask people if null is what get actually returns
 			return ResponseEntity.ok("post is not currently in database. save post first");
 		} else {
@@ -122,7 +121,7 @@ public class PostController {
 	public ResponseEntity<?> DeletePost(@RequestBody Post post) {
 		// assumption of a form of some kind
 
-		if (service.get(post.getId()).getId() == 0) { // TODO ask people if null is what get actually returns
+		if (post.getId()==0) { // TODO ask people if null is what get actually returns
 			return ResponseEntity.ok("post is not currently in database. create post first");
 		} else {
 			service.delete(post);

@@ -8,7 +8,7 @@ import javax.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 @Entity
-@Table(name = "COMMENT")
+@Table(name ="comment_tbl")
 public class Comment {
     @Id
     @GeneratedValue
@@ -46,6 +46,8 @@ public class Comment {
     }
 
     // Getters and Setters
+
+
     public int getId() {
         return id;
     }
@@ -86,12 +88,12 @@ public class Comment {
         this.timestamp = timestamp;
     }
 
-    public List<CommentLike> getCommentLikes() {
+    public List<CommentLike> getCommentlikes() {
         return commentlikes;
     }
 
-    public void setCommentLikes(List<CommentLike> likes) {
-        this.commentlikes = likes;
+    public void setCommentlikes(List<CommentLike> commentlikes) {
+        this.commentlikes = commentlikes;
     }
 
     // Utility

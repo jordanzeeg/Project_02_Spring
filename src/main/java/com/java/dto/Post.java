@@ -2,7 +2,6 @@ package com.java.dto;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.Date;
 import java.util.List;
 
 @Entity

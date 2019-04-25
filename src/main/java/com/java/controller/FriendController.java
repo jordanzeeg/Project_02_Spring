@@ -1,3 +1,4 @@
+
 package com.java.controller;
 
 import java.io.IOException;
@@ -18,6 +19,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.java.dto.Friend;
 import com.java.service.FriendService;
+
+
+
 
 @RestController
 @RequestMapping("/friends")
@@ -145,3 +149,8 @@ public class FriendController {
 
 	}
 }
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> branch 'testbranch' of https://github.com/jordanzeeg/Project_02_Spring.git

@@ -16,7 +16,9 @@ public interface CommentLikeServiceInterface<T> {
 	public void delete(CommentLike t);//deleting 1 comment like object
 	
 	//get List of CommentLike based on CommentId
-	public List<CommentLike> getLikeBasedOnCommentId(int commentId);
+
+
+	public List<CommentLike> getCommentLikeBasedOnCommentId(int commentId);
 	
 
 }

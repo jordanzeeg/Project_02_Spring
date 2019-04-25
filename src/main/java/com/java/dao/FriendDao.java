@@ -2,12 +2,15 @@ package com.java.dao;
 
 import java.util.List;
 
+import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.ParameterExpression;
 import javax.persistence.criteria.Root;
 
+import org.apache.log4j.Logger;
+import org.apache.log4j.Priority;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -23,79 +26,82 @@ public class FriendDao implements Dao<Friend> {
 	@Autowired
 	@Qualifier("sessionFactory")
 	SessionFactory sf;
-	
+
 	@Override
 	public Friend get(int id) {
-		Session s=sf.openSession();
+		Session s = sf.openSession();
 		Friend t = s.get(Friend.class, id);
 		s.close();
 		return t;
 	}
+
 	public Friend getByUsername(String username) {
-		Session s=sf.openSession();
-		  CriteriaBuilder cb = s.getCriteriaBuilder();
-		  s.beginTransaction();
-		  CriteriaQuery<Friend> q = cb.createQuery(Friend.class);
-		  Root<Friend> c = q.from(Friend.class);
-		  ParameterExpression<String> p = cb.parameter(String.class);
-		   q.select(c).where(cb.equal(c.get("username"), p));
-		   TypedQuery<Friend> query = s.createQuery(q);
-		   query.setParameter(p, username);
-		   Friend friend = query.getSingleResult();
-		   s.getTransaction().commit();
+		Session s = sf.openSession();
+		CriteriaBuilder cb = s.getCriteriaBuilder();
+		s.beginTransaction();
+		CriteriaQuery<Friend> q = cb.createQuery(Friend.class);
+		Root<Friend> c = q.from(Friend.class);
+		ParameterExpression<String> p = cb.parameter(String.class);
+		q.select(c).where(cb.equal(c.get("username"), p));
+		TypedQuery<Friend> query = s.createQuery(q);
+		query.setParameter(p, username);
+		Friend friend = new Friend();
+		try {
+			friend = query.getSingleResult();
+		} catch (NoResultException e) {
+			Logger.getLogger(FriendDao.class).log(Priority.ERROR, e);
+		}
+		s.getTransaction().commit();
 		s.close();
+
 		return friend;
 	}
-	
 
 	@Override
-	public List<Friend> getAll() { //create the list using criteriaBuilder
-		Session session=sf.openSession();
+	public List<Friend> getAll() { // create the list using criteriaBuilder
+		Session session = sf.openSession();
 		session.beginTransaction();
-		//Use nondeprecated things to do criteria
+		// Use nondeprecated things to do criteria
 		CriteriaBuilder builder = session.getCriteriaBuilder();
 		CriteriaQuery<Friend> criteriaQuery = builder.createQuery(Friend.class);
 		criteriaQuery.from(Friend.class);
-		List<Friend> list = session.createQuery(criteriaQuery).getResultList(); //call session 
+		List<Friend> list = session.createQuery(criteriaQuery).getResultList(); // call session
 		session.getTransaction().commit();
 		session.close();
 		return list;
 	}
-	
-	
-	//insert friend into the database if friend does not exist
+
+	// insert friend into the database if friend does not exist
 	@Override
 	public void save(Friend t) {
 		LoggerSingleton.getLogger().info("In the save method");
-		Session s =sf.openSession();
+		Session s = sf.openSession();
 		s.beginTransaction();
 		s.save(t);
 		s.getTransaction().commit();
 		s.close();
 	}
 
-	
-	//update the information for a friend that already exists
+	// update the information for a friend that already exists
 	@Override
 	public void update(Friend t) {
 		Session s = sf.openSession();
 		s.beginTransaction();
 		s.update(t);
 		s.getTransaction().commit();
-		s.close();		
-		
+		s.close();
+
 	}
 
-	
-	//delete object for a friend that currently exists
+	// delete object for a friend that currently exists
 	@Override
 	public void delete(Friend t) {
-		Session s=sf.openSession();
+		Session s = sf.openSession();
 		s.beginTransaction();
 		s.delete(t);
 		s.getTransaction().commit();
 		s.close();
-		
+
 	}
 
 }

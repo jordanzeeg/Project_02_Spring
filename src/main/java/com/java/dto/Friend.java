@@ -34,13 +34,13 @@ public class Friend {
     private String email;
 
 
-    @ManyToMany( cascade = { CascadeType.ALL })
+    @ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.ALL })
     @JoinTable(
             name = "FRIEND_POST",
             joinColumns = {@JoinColumn(name = "friend_id")},
             inverseJoinColumns = {@JoinColumn(name = "post_id")}
     )
-    @LazyCollection(LazyCollectionOption.FALSE)
+
     private List<Post> posts;
 
     // Constructors

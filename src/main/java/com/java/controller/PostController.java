@@ -47,14 +47,13 @@ public class PostController {
 
 	// TODO don't throw exception
 	@GetMapping("/getpostsbyuser{authorId}") // pass in user id
-
 	public ResponseEntity<?> GetPostsByUserId(@PathVariable int authorId) {
 		List<Post> posts = new ArrayList<Post>();
 		posts = service.getPostByAuthorId(authorId);
 		return ResponseEntity.ok(posts);
 	}
 
-	@GetMapping("/get/byid{id}") // sets variable as part of the url
+	@GetMapping("/byid{id}") // sets variable as part of the url
 	public ResponseEntity<?> getPostById(@PathVariable int id) {
 		// @Pathvariable sets the variable in the url to the parameter
 

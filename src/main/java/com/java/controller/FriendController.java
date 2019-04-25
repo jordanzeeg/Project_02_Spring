@@ -20,9 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.java.dto.Friend;
 import com.java.service.FriendService;
 
-
-
-
 @RestController
 @RequestMapping("/friends")
 @CrossOrigin(origins = "http://localhost:4200")
@@ -149,8 +146,3 @@ public class FriendController {
 
 	}
 }
-<<<<<<< HEAD
-=======
-
-
->>>>>>> branch 'testbranch' of https://github.com/jordanzeeg/Project_02_Spring.git

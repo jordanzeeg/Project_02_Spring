@@ -54,7 +54,7 @@ public class PostController {
 		return ResponseEntity.ok(posts);
 	}
 
-	@GetMapping("/get/byid{id}") // sets variable as part of the url
+	@GetMapping("/byid{id}") // sets variable as part of the url
 	public ResponseEntity<?> getPostById(@PathVariable int id) {
 		// @Pathvariable sets the variable in the url to the parameter
 

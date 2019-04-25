@@ -7,7 +7,6 @@ import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
 import java.sql.Timestamp;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -25,9 +24,8 @@ public class Post {
 
     //TODO: - Add property for post url image(S3)
 
-    @ManyToMany( mappedBy = "posts", cascade = { CascadeType.PERSIST,
-    											CascadeType.MERGE})
-    
+    @ManyToMany( mappedBy = "posts", cascade = { CascadeType.ALL})
+    @LazyCollection(LazyCollectionOption.FALSE)
     private List<Friend> friends;
 
     @OneToMany( mappedBy = "post", cascade = { CascadeType.ALL })

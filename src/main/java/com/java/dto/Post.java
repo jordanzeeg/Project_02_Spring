@@ -27,7 +27,6 @@ public class Post {
 
     @ManyToMany( mappedBy = "posts", cascade = { CascadeType.PERSIST,
     											CascadeType.MERGE})
-    
     private List<Friend> friends;
 
     @OneToMany( mappedBy = "post", cascade = { CascadeType.ALL })

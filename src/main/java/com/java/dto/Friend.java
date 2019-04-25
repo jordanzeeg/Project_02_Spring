@@ -43,8 +43,6 @@ public class Friend {
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Post> posts;
 
-    //TODO: - add property for profile pic (S3)
-
     // Constructors
 
     public Friend() {

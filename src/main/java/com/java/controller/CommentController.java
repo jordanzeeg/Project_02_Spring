@@ -27,86 +27,19 @@ public class CommentController {
 	@Autowired
 	CommentService service;
 
-	@GetMapping
-	public void GetAllComments(HttpServletResponse response) throws IOException {
-		List<Comment> comments = service.getAll();
-		response.getWriter().println(comments);
-	}
-	@GetMapping("/getcommentsbypost{id}") // pass in user id
-	public void GetCommentsByPostId(@PathVariable int postId, HttpServletResponse response) throws IOException {
-		List<Comment> comments = service.getCommentByPostId(postId);
-		response.getWriter().println(comments);
-	}
+	//@GetMapping TODO: - GetAllComments
 
-	@GetMapping("/get/byid{id}") // sets variable as part of the url
-	public void getCommentById(@PathVariable int id, HttpServletResponse response) throws IOException {
-		// @Pathvariable sets the variable in the url to the parameter
+	//@GetMapping("/getcommentsbypost{id}") TODO: - getCommentsByPostId
 
-		Comment comment = service.get(id);
-		if (comment == null) {
-			response.getWriter().println("Comment object not found");
-		} else {
-			try {
-				response.getWriter().println(comment);
-			} catch (IOException e) {
-				response.getWriter().println("id not found");
-				e.printStackTrace();
-			}
-		}
-	}
 
-	// TODO don't throw exception
+	//@GetMapping("/get/byid{id}") TODO: - getCommentById
 
-	// TODO CRUD FRIENDS
-	// TODO getcommentbyname
-	// TODO getCommentsbyCommentId
+	//@PostMapping("/save") TODO: - saveComment
 
-//		@GetMapping("/getbycommentid") //will add if we have time
-//		public void getCommentByCommentId(@PathVariable int commentId, HttpServletResponse response) throws IOException{
-//				
-//		}
-	@PostMapping("/save")
-	public void SaveComment(@Valid @ModelAttribute Comment comment, BindingResult result, HttpServletResponse response)
-			throws IOException {
-		// assumption of a form of some kind
-		if (result.hasErrors()) {
-			response.getWriter().println("Inserted unsuccessfully");
-		}
-		service.save(comment);
-		response.getWriter().println("Inserted successfully");
-	}
 
-	@PostMapping("/update")
-	public void UpdateComment(@Valid @ModelAttribute Comment comment, BindingResult result,
-			HttpServletResponse response) throws IOException {
-		// assumption of a form of some kind
-		if (result.hasErrors()) {
-			response.getWriter().println("Inserted unsuccessfully");
-		} else if (service.get(comment.getId()) == null) { // TODO ask people if null is what get actually returns
-			response.getWriter().println("comment is not currently in database. save comment first");
-		} else {
-			service.update(comment);
-			response.getWriter().println("Inserted successfully");
-		}
-	}
+	//@PostMapping("/update") TODO: - updateComment
 
-	@PostMapping("/delete")
-	public void DeleteComment(@Valid @ModelAttribute Comment comment, BindingResult result,
-			HttpServletResponse response) throws IOException {
-		// assumption of a form of some kind
-		if (result.hasErrors()) {
-			response.getWriter().println("Deleted unsuccessfully");
-		} else if (service.get(comment.getId()) == null) { // TODO ask people if null is what get actually returns
-			response.getWriter().println("comment is not currently in database. create comment first");
-		} else {
-			service.delete(comment);
-			response.getWriter().println("Deleted successfully. It wasn't a good comment anyway");
-		}
-	}
 
-	// TODO don't throw exception
+	//@PostMapping("/delete") TODO: - deleteComment
 
-	// TODO CRUD Comments
-	// TODO getcommentsbyid
-	// TODO getcommentsbypostid
 }

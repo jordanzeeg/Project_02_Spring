@@ -1,5 +1,6 @@
 package com.java.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.NoResultException;
@@ -9,11 +10,9 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.ParameterExpression;
 import javax.persistence.criteria.Root;
 
-import org.apache.log4j.Logger;
-import org.apache.log4j.Priority;
-import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
@@ -36,22 +35,24 @@ public class FriendDao implements Dao<Friend> {
 	}
 
 	public Friend getByUsername(String username) {
+		Friend friend = new Friend();
 		Session s = sf.openSession();
 		CriteriaBuilder cb = s.getCriteriaBuilder();
-		s.beginTransaction();
+		s.beginTransaction(); // original
+
 		CriteriaQuery<Friend> q = cb.createQuery(Friend.class);
 		Root<Friend> c = q.from(Friend.class);
 		ParameterExpression<String> p = cb.parameter(String.class);
 		q.select(c).where(cb.equal(c.get("username"), p));
 		TypedQuery<Friend> query = s.createQuery(q);
 		query.setParameter(p, username);
-		Friend friend = new Friend();
 		try {
 			friend = query.getSingleResult();
 		} catch (NoResultException e) {
-			Logger.getLogger(FriendDao.class).log(Priority.ERROR, e);
+			LoggerSingleton.getLogger().info("Empty list created in FriendDao.getByUsername()");
 		}
 		s.getTransaction().commit();
+
 		s.close();
 
 		return friend;
@@ -59,13 +60,18 @@ public class FriendDao implements Dao<Friend> {
 
 	@Override
 	public List<Friend> getAll() { // create the list using criteriaBuilder
+		List<Friend> list = new ArrayList<Friend>();
 		Session session = sf.openSession();
 		session.beginTransaction();
 		// Use nondeprecated things to do criteria
 		CriteriaBuilder builder = session.getCriteriaBuilder();
 		CriteriaQuery<Friend> criteriaQuery = builder.createQuery(Friend.class);
 		criteriaQuery.from(Friend.class);
-		List<Friend> list = session.createQuery(criteriaQuery).getResultList(); // call session
+		try {
+			list = session.createQuery(criteriaQuery).getResultList(); // call session
+		} catch (NoResultException e) {
+			LoggerSingleton.getLogger().info("Empty list created in FriendDao.getAll()");
+		}
 		session.getTransaction().commit();
 		session.close();
 		return list;
@@ -76,9 +82,13 @@ public class FriendDao implements Dao<Friend> {
 	public void save(Friend t) {
 		LoggerSingleton.getLogger().info("In the save method");
 		Session s = sf.openSession();
-		s.beginTransaction();
+
+		Transaction tx = s.beginTransaction(); // changed by Poho
+		// s.beginTransaction(); original
 		s.save(t);
-		s.getTransaction().commit();
+		// s.getTransaction().commit(); //original
+		tx.commit(); // changed by Poho
+
 		s.close();
 	}
 

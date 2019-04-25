@@ -1,5 +1,9 @@
 package com.java.dto;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+import org.hibernate.mapping.Join;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -11,7 +15,8 @@ public class Friend {
     @Column(name = "id")
     private int id;
 
-    //private int salt;
+    @Column(name = "salt", nullable = false)
+    private String salt;
 
     @Column(name = "username", unique = true, nullable = false)
     private String username;
@@ -29,12 +34,13 @@ public class Friend {
     private String email;
 
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.ALL })
     @JoinTable(
             name = "FRIEND_POST",
             joinColumns = {@JoinColumn(name = "friend_id")},
             inverseJoinColumns = {@JoinColumn(name = "post_id")}
     )
+
     private List<Post> posts;
 
     //TODO: - add property for profile pic (S3)
@@ -44,9 +50,9 @@ public class Friend {
     public Friend() {
     }
 
-    public Friend(String username, String password, String firstName, String lastName, String email,
+    public Friend(String username, String password, String salt, String firstName, String lastName, String email,
                   List<Post> posts) {
-        //this.salt = salt;
+        this.salt = salt;
         this.username = username;
         this.password = password;
         this.firstName = firstName;
@@ -57,73 +63,91 @@ public class Friend {
 
     // Getters and Setters
 
-	public int getId() {
-		return id;
-	}
+    public int getId() {
+        return id;
+    }
 
-	public void setId(int id) {
-		this.id = id;
-	}
+    public void setId(int id) {
+        this.id = id;
+    }
 
-	public String getUsername() {
-		return username;
-	}
+    public String getSalt() { return salt; }
 
-	public void setUsername(String username) {
-		this.username = username;
-	}
 
-	public String getPassword() {
-		return password;
-	}
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
+    public String getUsername() {
+        return username;
+    }
 
-	public String getFirstName() {
-		return firstName;
-	}
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
+    public String getPassword() {
+        return password;
+    }
 
-	public String getLastName() {
-		return lastName;
-	}
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
+    public String getFirstName() {
+        return firstName;
+    }
 
-	public String getEmail() {
-		return email;
-	}
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
+    public String getLastName() {
+        return lastName;
+    }
 
-	public List<Post> getPosts() {
-		return posts;
-	}
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
 
-	public void setPosts(List<Post> posts) {
-		this.posts = posts;
-	}
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public List<Post> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(List<Post> posts) {
+        this.posts = posts;
+    }
 
 
     // Utility
 
-	
-	
-	  @Override public String toString() { return "{\n" + "\"id\":\"" + id + "\",\n" +
-	  " \"username\":\"" + username + '\"' + ",\n" +
-	  " \"password\":\"" + password + '\"' + ",\n" +
-	  " \"firstName\":\"" + firstName + '\"' + ",\n" +
-	  " \"lastName\":\"" + lastName + '\"' + ",\n" +
-	  " \"email\":\"" + email + '\"' + "\n" + '}'+ "\n" ; }
-	  
-	
+
+    @Override public String toString() { return "{\n" + "\"id\":\"" + id + "\",\n" +
+            " \"username\":\"" + username + '\"' + ",\n" +
+            " \"salt\":\"" + salt + '\"' + ",\n" +
+            " \"password\":\"" + password + '\"' + ",\n" +
+            " \"firstName\":\"" + firstName + '\"' + ",\n" +
+            " \"lastName\":\"" + lastName + '\"' + ",\n" +
+            " \"email\":\"" + email + '\"' + "\n" + '}'+ "\n" ; }
+
+	//new thing added by Poho
+    public void setSalt(String salt2) {
+		this.salt=salt2;
+		
+	}
+
+    public Friend(String username, String password, String salt, String firstName, String lastName, String email) {
+  this.username = username;
+  this.password = password;
+  this.firstName = firstName;
+  this.lastName = lastName;
+  this.email = email;
+  this.salt = salt;
+}
+
 }

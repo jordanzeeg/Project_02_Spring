@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 import com.java.dto.Friend;
+import com.java.dto.Messengering;
 import com.java.service.FriendService;
 
 @RestController
@@ -42,21 +43,21 @@ public class FriendController {
 	
 	public ResponseEntity<?> getFriendById(@PathVariable("id") int id) throws IOException { 
 		// @Pathvariable sets the variable in the url to the parameter
-
+		Messengering mess = new Messengering("A friend with that ID was not found");
 		Friend friend = service.get(id);
 		if (friend == null) {
-			return ResponseEntity.ok().body("a friend with id: " + id+ " is not currently in database.");
+			return ResponseEntity.ok().body(mess);
 		} else {
-			return ResponseEntity.ok().body(friend.toString());
+			return ResponseEntity.ok().body(friend);
 		}
 		}
 	@GetMapping("/byusername{username}") // sets variable as part of the url
 	public ResponseEntity<?> getFriendByUsername(@PathVariable String username) { 
 		// @Pathvariable sets the variable in the url to the parameter
-		
+		Messengering mess = new Messengering("A friend with that Username was not found");
 		Friend friend = service.getByUsername(username);
 		if (friend.getUsername() == null) {
-			return ResponseEntity.ok().body("a friend with username: " + username+ " is not currently in database.");
+			return ResponseEntity.ok().body(mess);
 		} else {
 			return ResponseEntity.ok().body(friend);
 		}
@@ -72,43 +73,43 @@ public class FriendController {
 //	}
 	@PostMapping()
 	public ResponseEntity<?> SaveFriend(@RequestBody Friend friend) { 
+		Messengering mess = new Messengering("This friend is already in database");
+		Messengering success = new Messengering("Save Successful");
 		Friend dataFriend = service.getByUsername(friend.getUsername());
 		if(dataFriend.getId()== 0) {
 		service.save(friend);
 		String username = friend.getUsername();
-		return ResponseEntity.ok().body("Friend saved with username = " + username + " id = " + friend.getId());
+		return ResponseEntity.ok().body(success);
 	}
-		else return ResponseEntity.ok("Friend already in database." + dataFriend);
+		else return ResponseEntity.ok(mess);
 	}
 
 	
 	@PutMapping() //  "/byid{id}"
 	public ResponseEntity<?> UpdateFriend(@RequestBody Friend friend) throws IOException {
-		//@PathVariable("id")  int id,
-//		if(friend.getId()!= id) {
-//			return ResponseEntity.ok("friend id does not match id from path.");
-//		}
+		Messengering mess = new Messengering("This friend is not currently in database");
+		Messengering success = new Messengering("Update Successful");
 		Friend dataFriend = service.getByUsername(friend.getUsername()); 
 		 if(dataFriend.getId() == 0) { //TODO ask people if null is what get actually returns
-			//response.getWriter().println("friend is not currently in database. save friend first");
-			return ResponseEntity.ok().body("friend is not currently in database. save friend first");
+			return ResponseEntity.ok().body(mess);
 		}else
 		{
 		service.update(friend);
 		//response.getWriter().println("Inserted successfully");
-		return ResponseEntity.ok().body("Inserted Successfully");
+		return ResponseEntity.ok().body(success);
 		}
 	}
 	@DeleteMapping("/byid{id}")
 	public ResponseEntity<?> DeleteFriend(@PathVariable("id") int id) { 
-		// assumption of a form of some kind
+		Messengering mess = new Messengering("This friend is not currently in database");
+		Messengering success = new Messengering("Delete Successful");
 		Friend friend = service.get(id);
 		if(friend == null) { //TODO ask people if null is what get actually returns
-			return ResponseEntity.ok().body("friend not found to delete. Delete unsuccessful");
+			return ResponseEntity.ok().body(mess);
 		}else
 		{
 		service.delete(friend);
-		return ResponseEntity.ok().body("Deleted successfully. They weren't really our friend anyway");
+		return ResponseEntity.ok().body(success);
 		}
 	}
 	
@@ -122,33 +123,39 @@ public class FriendController {
 	 *  Testing Testing by Poho */
 	@PostMapping("/register")
 	public ResponseEntity<?> registerFriend(@RequestBody Friend friend) {
+		Messengering mess = new Messengering("Username already existed. Please use a different username");
+		Messengering mess2 = new Messengering("Email already existed. Please use a different email");
+		Messengering success = new Messengering("Save Successful");
 		Friend dataFriend = service.getUsername(friend.getUsername());
 		Friend emailFriend = service.getEmail(friend.getEmail());
 		if (dataFriend != null) {
-			return ResponseEntity.ok().body("Username already existed. Please use a different username");
+			return ResponseEntity.ok().body(mess);
 		}
 		if (emailFriend != null) {
-			return ResponseEntity.ok().body("Email already existed. Please use a different email");
+			return ResponseEntity.ok().body(mess2);
 		}
 		service.save(friend);
 		String username = friend.getUsername();
-		return ResponseEntity.ok().body("Friend saved with username = " + username + " id = " + friend.getId());
+		return ResponseEntity.ok().body(success);
 		// }
 		// else return ResponseEntity.ok("Friend already in database." + dataFriend);
 	}
 
 	@PostMapping("/login")
 	public ResponseEntity<?> loginTrial(@RequestBody Friend friend) {
+		Messengering mess = new Messengering("Login Trial Fail. UserName/Password Not match");
+		Messengering mess2 = new Messengering("Login Trial Fail. UserName/Password Not match");
+		Messengering success = new Messengering("Login Successful");
 		Friend dataFriend = service.getUsername(friend.getUsername());// info from db
 		if (dataFriend == null) {
-			return ResponseEntity.ok("Login Trial Fail. UserName/Password Not match");
+			return ResponseEntity.ok(mess);
 		} else if ((friend.getUsername().equals(dataFriend.getUsername()))) {
 			if (service.passwordValidation(friend.getUsername(), friend.getPassword())) {
 				// String username = friend.getUsername();
-				return ResponseEntity.ok().body("Login Trial Success with username: " + dataFriend.getUsername());
+				return ResponseEntity.ok().body(success);
 			}
 		}
-		return ResponseEntity.ok("Login Trial Fail. UserName/Password Not match");
+		return ResponseEntity.ok(mess2);
 
 	}
 }

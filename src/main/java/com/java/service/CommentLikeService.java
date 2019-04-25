@@ -58,7 +58,7 @@ public class CommentLikeService implements CommentLikeServiceInterface<Comment> 
 	// Methods that don't access the db directly
 	
 	@Override
-	public List<CommentLike> getLikeBasedOnCommentId(int commentId) {
+	public List<CommentLike> getCommentLikeBasedOnCommentId(int commentId) {
 		List<CommentLike> c_like = new ArrayList<>(); //creating a new list for likes that has commentId as the commentId passed in
 		LoggerSingleton.getLogger().info("Getting likes based on CommentId: "+commentId);
 		for(int i=0; i<getAll().size(); i++) {//going through the list

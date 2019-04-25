@@ -47,7 +47,6 @@ public class PostController {
 
 	// TODO don't throw exception
 	@GetMapping("/getpostsbyuser{authorId}") // pass in user id
-
 	public ResponseEntity<?> GetPostsByUserId(@PathVariable int authorId) {
 		List<Post> posts = new ArrayList<Post>();
 		posts = service.getPostByAuthorId(authorId);

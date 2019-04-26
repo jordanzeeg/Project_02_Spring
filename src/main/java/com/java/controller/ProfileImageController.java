@@ -7,17 +7,14 @@ import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.*;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.io.IOException;
 
 
 @RestController
-@RequestMapping("/profile_image")
+@RequestMapping("profile_image")
 public class ProfileImageController {
 
     // Credentials for S3 TODO: - figure out way not to hardcode this in controller
@@ -36,32 +33,22 @@ public class ProfileImageController {
             .build();
 
 
-    //@PostMapping("/upload")
-    @RequestMapping(value = "/file", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody String saveProfilePic(@RequestParam("username") String username,
-                                            @RequestParam("file") MultipartFile file) {
+    @PostMapping("upload")
+    public ResponseEntity<?> saveProfilePic(@RequestParam("username") String username,
+                                            @RequestParam("file") File file) {
         // Key to get specific user's folder
         String key = "user_profile_pic/" + username + "/profile_pic";
 
         // boolean to determine if user folder exists
         boolean exists = s3client.doesObjectExist(bucketName, key);
-        ObjectMetadata objectMetadata = new ObjectMetadata();
 
         // Check if folder exists, if so delete it and replace it with new one (changing profle pic) else create a
         // file with profile pic
         if (exists) {
             s3client.deleteObject(bucketName, key);
-            try {
-                s3client.putObject(new PutObjectRequest(bucketName, key, file.getInputStream(), objectMetadata).withCannedAcl(CannedAccessControlList.PublicRead));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            s3client.putObject(new PutObjectRequest(bucketName, key, file).withCannedAcl(CannedAccessControlList.PublicRead));
         } else {
-            try {
-                s3client.putObject(new PutObjectRequest(bucketName, key, file.getInputStream(), objectMetadata).withCannedAcl(CannedAccessControlList.PublicRead));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            s3client.putObject(new PutObjectRequest(bucketName, key, file).withCannedAcl(CannedAccessControlList.PublicRead));
         }
 
         // Get object from file
@@ -70,10 +57,10 @@ public class ProfileImageController {
         // Get URI of object from AWS
         String URI = s3Object.getObjectContent().getHttpRequest().getURI().toString();
 
-        return URI;
+        return ResponseEntity.ok().body(URI);
     }
 
-    @GetMapping("/image")
+    @GetMapping("image")
     public ResponseEntity<?> getProfilePicByUsername(@RequestParam("username") String username) {
         // Key to get specific user's folder
         String key = "user_profile_pic/" + username + "/profile_pic";

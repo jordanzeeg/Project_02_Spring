@@ -145,12 +145,12 @@ public class FriendController {
 		if (dataFriend == null) {
 			return ResponseEntity.ok(mess);
 
-		} else if ((friend.getUsername().equals(dataFriend.getUsername()))) {
+		} /*else if ((friend.getUsername().equals(dataFriend.getUsername()))) {*/
 			if (service.passwordValidation(friend.getUsername(), friend.getPassword())) {
 				// String username = friend.getUsername();
 				return ResponseEntity.ok().body(success);
 			}
-		}
+		//}
 		return ResponseEntity.ok(mess);
 
 	}

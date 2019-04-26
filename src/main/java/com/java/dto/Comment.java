@@ -5,6 +5,10 @@ import java.util.List;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.hibernate.annotations.CreationTimestamp;
 
 @Entity
@@ -18,19 +22,22 @@ public class Comment {
     @Column(name = "description")
      private String description;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "friend_id", nullable = false)
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    @JsonIdentityReference(alwaysAsId = true)
     private Friend author;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "post_id", nullable = false)
+    @JsonIgnore
     private Post post;
 
     @Column(name = "timestamp")
     @CreationTimestamp
     private Timestamp timestamp;
 
-    @OneToMany(mappedBy = "comment")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "comment")
     private List<CommentLike> commentlikes;
 
     // Constructors

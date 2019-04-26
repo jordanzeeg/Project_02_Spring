@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -35,12 +36,11 @@ public class PostController {
 
 	// TODO don't throw exception
 
-	@GetMapping
-	@ResponseBody
+	@GetMapping(consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ResponseBody()
 	public ResponseEntity<?> getPosts() throws IOException {
 
 		List<Post> posts = service.getAll();
-
 		return ResponseEntity.ok(posts); // copied from video tutorial by b2 Tech
 		// return ResponseEntity.ok().body(responseString.toString());
 	}
@@ -83,7 +83,7 @@ public class PostController {
 	}
 
 
-	@PostMapping()
+	@PostMapping
 	public ResponseEntity<?> SavePost(@RequestBody Post post) {
 		Messengering mess = new Messengering("Post already exists in Database");
 		Messengering success = new Messengering("Post not found in Database. Save successful");

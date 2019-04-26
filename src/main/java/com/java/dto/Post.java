@@ -40,6 +40,7 @@ public class Post {
 
     @OneToMany( mappedBy = "post", cascade = { CascadeType.ALL })
     @LazyCollection(LazyCollectionOption.FALSE)
+    @JsonIgnoreProperties("post")
     private List<PostLike> postLikes;
 
     @Column(name = "timestamp")

@@ -47,17 +47,17 @@ public class PostController {
 
 
 	// TODO don't throw exception
-	@GetMapping("/getpostsbyuser{authorId}") // pass in user id
+	@GetMapping("/byuser{authorId}") // pass in user id
 	public ResponseEntity<?> GetPostsByUserId(@PathVariable int authorId) {
 		List<Post> posts = new ArrayList<Post>();
 		posts = service.getPostByAuthorId(authorId);
 		return ResponseEntity.ok(posts);
 	}
 
-	@GetMapping("/byid{id}") // sets variable as part of the url
+	@GetMapping("/{id}") // sets variable as part of the url
 	public ResponseEntity<?> getPostById(@PathVariable int id) {
 		// @Pathvariable sets the variable in the url to the parameter
-		Messengering mess = new Messengering("Post not found");
+		Messengering mess = new Messengering(1,"Post not found");
 		Post post = service.get(id);
 		if (post == null) {
 			return ResponseEntity.ok(mess);
@@ -67,7 +67,7 @@ public class PostController {
 		}
 	}
 
-	@GetMapping("/get/bytitle{title}") // sets variable as part of the url
+	@GetMapping("/={title}") // sets variable as part of the url
 	public void getPostByUsername(@PathVariable String title, HttpServletResponse response) throws IOException {
 		// @Pathvariable sets the variable in the url to the parameter
 		
@@ -85,8 +85,8 @@ public class PostController {
 
 	@PostMapping
 	public ResponseEntity<?> SavePost(@RequestBody Post post) {
-		Messengering mess = new Messengering("Post already exists in Database");
-		Messengering success = new Messengering("Post not found in Database. Save successful");
+		Messengering mess = new Messengering(1,"Post already exists in Database");
+		Messengering success = new Messengering(0,"Post not found in Database. Save successful");
 		if (post.getId() == 0) {
 			service.save(post);
 			
@@ -98,8 +98,8 @@ public class PostController {
 	@PutMapping
 	public ResponseEntity<?> UpdatePost(@RequestBody Post post) {
 		// assumption of a form of some kind
-		Messengering mess = new Messengering("Post not found in Database");
-		Messengering success = new Messengering("Post updated found in Database");
+		Messengering mess = new Messengering(1,"Post not found in Database");
+		Messengering success = new Messengering(0,"Post updated found in Database");
 		if (service.get(post.getId()).getId() == 0) { // TODO ask people if null is what get actually returns
 			return ResponseEntity.ok(mess);
 		} else {
@@ -111,8 +111,8 @@ public class PostController {
 	@DeleteMapping
 	public ResponseEntity<?> DeletePost(@RequestBody Post post) {
 		// assumption of a form of some kind
-		Messengering mess = new Messengering("Post not found in Database");
-		Messengering success = new Messengering("Post deleted in Database");
+		Messengering mess = new Messengering(1,"Post not found in Database");
+		Messengering success = new Messengering(0,"Post deleted in Database");
 		if (post.getId()==0) { // TODO ask people if null is what get actually returns
 			return ResponseEntity.ok(mess);
 		} else {
@@ -120,6 +120,8 @@ public class PostController {
 			return ResponseEntity.ok(success);
 		}
 	}
+
+
 
 }
 

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.java.dto.Comment;
 import com.java.dto.Friend;
+import com.java.dto.Messengering;
 import com.java.service.CommentService;
 
 
@@ -31,47 +32,66 @@ public class CommentController {
 		List<Comment> commentList = service.getAll();
 		return ResponseEntity.ok(commentList);
 	}
-	@GetMapping("/getcommentsbypost/{id}")
+	@GetMapping("/bypost{id}")
 	public ResponseEntity<?> getCommentsByPostId(@PathVariable("id") int id) {
+		Messengering mess = new Messengering(5,"No comments found with post id:"+ id);
 		List<Comment> commentList = service.getCommentByPostId(id);
 		if (commentList == null) {
-			return ResponseEntity.ok("No comments found with post id: " + id);
+			return ResponseEntity.ok(mess);
 		} else {
 			return ResponseEntity.ok(commentList);
 		}
 	}
 
-	@GetMapping("/getcommentbyid/{id}")
+	@GetMapping("/{id}")
 	public ResponseEntity<?> getCommentsById(@PathVariable("id") int id) {
+		Messengering mess = new Messengering(1,"No comments found with id:"+ id);
 		Comment comment = service.get(id);
 		if(comment == null) {
-			return ResponseEntity.ok("No comment found with id: " + id);
+			return ResponseEntity.ok(mess);
 		} else {
 			return ResponseEntity.ok(comment);
 		}
 	}
 
-	@PostMapping()
+	@PostMapping
 	public ResponseEntity<?> saveComment(@RequestBody Comment comment) {
+		Messengering mess = new Messengering(1,"Comment already exists in Database");
+		Messengering success = new Messengering(0,"Comment not found in Database. Save successful with id: ");
+		if(comment.getId()==0) {
 		service.save(comment);
-		return ResponseEntity.ok("Comment saved with id: " + comment.getId());
+		success.setMenagerie(success.getMenagerie() + comment.getId());
+		return ResponseEntity.ok(success);
+		}else 
+			return ResponseEntity.ok(mess);
 
 	}
 
 
-	@PostMapping("/updatecomment")
+	@PutMapping
 	public ResponseEntity<?> updateComment(@RequestBody Comment comment) {
+		Messengering mess = new Messengering(1,"Comment doesn't exist in Database");
+		Messengering success = new Messengering(0,"Comment exists in Database. update successful with id: ");
+		if(comment.getId()!=0) {
 		service.update(comment);
-		return ResponseEntity.ok("Comment updated");
+		success.setMenagerie(success.getMenagerie() + comment.getId());
+		return ResponseEntity.ok(success);
+		}else 
+			return ResponseEntity.ok(mess);
 	}
 
 
 
 
-	@PostMapping("/deletecomment/{id}")
-	public ResponseEntity<?> deleteComment(@PathVariable("id") int id) {
-		Comment comment = service.get(id);
+	@DeleteMapping
+	public ResponseEntity<?> deleteComment(@RequestBody Comment comment) {
+		Messengering mess = new Messengering(1,"Comment doesn't exist in Database");
+		Messengering success = new Messengering(0,"Comment exists in Database. update successful with id: ");
+		if(comment.getId() == service.get(comment.getId()).getId()) {
 		service.delete(comment);
-		return ResponseEntity.ok("Comment deleted with id: " + id);
+		success.setMenagerie(success.getMenagerie() + comment.getId());
+		return ResponseEntity.ok(success);
+		}else 
+			return ResponseEntity.ok(mess);
 	}
 }

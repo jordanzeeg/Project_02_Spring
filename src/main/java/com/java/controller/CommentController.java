@@ -51,7 +51,7 @@ public class CommentController {
 		}
 	}
 
-	@PostMapping("/savecomment")
+	@PostMapping()
 	public ResponseEntity<?> saveComment(@RequestBody Comment comment) {
 		service.save(comment);
 		return ResponseEntity.ok("Comment saved with id: " + comment.getId());

@@ -5,10 +5,11 @@ import java.util.List;
 
 import javax.persistence.*;
 
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
 
 @Entity
 @Table(name = "comment_tbl")
@@ -21,26 +22,22 @@ public class Comment {
     @Column(name = "description")
      private String description;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "friend_id", nullable = false)
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     @JsonIdentityReference(alwaysAsId = true)
     private Friend author;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "post_id", nullable = false)
-    @JsonManagedReference
-    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-    @JsonIdentityReference(alwaysAsId = true)
+    @JsonIgnore
     private Post post;
 
     @Column(name = "timestamp")
     @CreationTimestamp
     private Timestamp timestamp;
 
-    @OneToMany(mappedBy = "comment")
-    @LazyCollection(LazyCollectionOption.FALSE)
-    @JsonIgnore
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "comment")
     private List<CommentLike> commentlikes;
 
     // Constructors

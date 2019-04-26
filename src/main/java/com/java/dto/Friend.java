@@ -4,6 +4,11 @@ import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 import org.hibernate.mapping.Join;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -40,8 +45,11 @@ public class Friend {
             joinColumns = {@JoinColumn(name = "friend_id")},
             inverseJoinColumns = {@JoinColumn(name = "post_id")}
     )
-
+    @JsonIgnoreProperties("friends")
     private List<Post> posts;
+
+    
+    //TODO: - add property for profile pic (S3)
 
     // Constructors
 
@@ -112,7 +120,6 @@ public class Friend {
     public void setEmail(String email) {
         this.email = email;
     }
-
     public List<Post> getPosts() {
         return posts;
     }

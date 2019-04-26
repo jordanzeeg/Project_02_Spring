@@ -2,6 +2,9 @@ package com.java.dto;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 
@@ -12,21 +15,38 @@ public class PostLike {
     @Column(name = "id")
     private int id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "post_id", nullable = false)
+    @JsonIgnore
     private Post post;
 
     @CreationTimestamp
     @Column(name = "timestamp")
     private Timestamp timestamp;
 
-
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "friend_id", nullable = false)
+    @JsonIgnore
+    private Friend author;
+    //add author
     // Constructor
 
     public PostLike() {
     }
 
-    public PostLike(Post post, Timestamp timestamp) {
+    public Friend getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(Friend author) {
+		this.author = author;
+	}
+
+	public void setTimestamp(Timestamp timestamp) {
+		this.timestamp = timestamp;
+	}
+
+	public PostLike(Post post, Timestamp timestamp) {
         this.post = post;
         this.timestamp = timestamp;
     }

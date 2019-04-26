@@ -2,12 +2,14 @@ package com.java.dto;
 
 import javax.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -29,12 +31,11 @@ public class Post {
 
     @ManyToMany( mappedBy = "posts", cascade = { CascadeType.ALL})
     @LazyCollection(LazyCollectionOption.FALSE)
-    @JsonIgnore
+    @JsonIgnoreProperties("posts")
     private List<Friend> friends;
 
-    @OneToMany( mappedBy = "post", cascade = { CascadeType.ALL })
-    @LazyCollection(LazyCollectionOption.FALSE)
-	@JsonBackReference
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "post", cascade = { CascadeType.ALL })
+    
     private List<Comment> comments;
 
     @OneToMany( mappedBy = "post", cascade = { CascadeType.ALL })
@@ -94,7 +95,7 @@ public class Post {
 	public void setTitle(String title) {
 		this.title = title;
 	}
-
+	
 	public List<Friend> getFriends() {
 		return friends;
 	}

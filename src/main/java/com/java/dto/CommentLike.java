@@ -1,6 +1,7 @@
 package com.java.dto;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.hibernate.annotations.CreationTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -24,6 +25,7 @@ public class CommentLike {
 
     @CreationTimestamp
     @Column(name = "timestamp")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd@HH:mm:ss.SSSZ")
     private Timestamp timestamp;
     
     @ManyToOne(fetch = FetchType.EAGER)

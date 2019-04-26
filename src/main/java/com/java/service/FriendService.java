@@ -14,13 +14,14 @@ import com.java.util.LoggerSingleton;
 @Service
 public class FriendService implements FriendServiceInterface<Friend> {
 
-	@Autowired FriendDao dao;
-	
+	@Autowired
+	FriendDao dao;
+
 	@Override
 	public Friend get(int id) {
-		LoggerSingleton.getLogger().info("FETCHING Friend object based on friendId: "+id);
+		LoggerSingleton.getLogger().info("FETCHING Friend object based on friendId: " + id);
 		Friend friend = dao.get(id);
-		LoggerSingleton.getLogger().info("FETCHED Friend object based on friendId: "+id);
+		LoggerSingleton.getLogger().info("FETCHED Friend object based on friendId: " + id);
 		return friend;
 	}
 
@@ -36,15 +37,15 @@ public class FriendService implements FriendServiceInterface<Friend> {
 	public void save(Friend t) {
 		LoggerSingleton.getLogger().info("SAVING a Friend object to database");
 		PasswordAndSalt ps = new PasswordAndSalt();
-		String salt = ps.getSalt(30);//generating a random salt
-		
-		String passwordToDB = ps.generateSecurePassword(t.getPassword(), salt); //encrypting the password
-		t.setSalt(salt); //setting salt to be save in the db
-		t.setPassword(passwordToDB); //setting encrypted password to be save in the db
+		String salt = ps.getSalt(30);// generating a random salt
+
+		String passwordToDB = ps.generateSecurePassword(t.getPassword(), salt); // encrypting the password
+		t.setSalt(salt); // setting salt to be save in the db
+		t.setPassword(passwordToDB); // setting encrypted password to be save in the db
 
 		dao.save(t);
 		LoggerSingleton.getLogger().info("SAVED a Friend object to database");
-		
+
 	}
 
 	@Override
@@ -57,15 +58,15 @@ public class FriendService implements FriendServiceInterface<Friend> {
 	@Override
 	public void delete(Friend t) {
 		LoggerSingleton.getLogger().info("DELETING a Friend object from database");
-		dao.delete(t);	
+		dao.delete(t);
 		LoggerSingleton.getLogger().info("DELETED a Friend object to database");
 	}
-	
+
 	public Friend getByUsername(String username) {
-		LoggerSingleton.getLogger().info("FETCHING Friend object based on friendUsername: "+ username);
+		LoggerSingleton.getLogger().info("FETCHING Friend object based on friendUsername: " + username);
 		Friend friend = dao.getByUsername(username);
-		LoggerSingleton.getLogger().info("FETCHED Friend object based on friendUsername: "+ username);
-		LoggerSingleton.getLogger().info("FETCHED Friend object based on friendId: "+ friend.getId());
+		LoggerSingleton.getLogger().info("FETCHED Friend object based on friendUsername: " + username);
+		LoggerSingleton.getLogger().info("FETCHED Friend object based on friendId: " + friend.getId());
 		return friend;
 	}
 
@@ -82,66 +83,63 @@ public class FriendService implements FriendServiceInterface<Friend> {
 //		LoggerSingleton.getLogger().info("FETCHED Friend object based on username: "+username);
 //		return friend;
 //	}
-	
-	 public Friend storeFriend(Friend friend) {
-		 Friend friend2 = new Friend();
-			friend2.setId(friend.getId());
-			friend2.setUsername(friend.getUsername());
-			friend2.setFirstName(friend.getFirstName());
-			friend2.setLastName(friend.getLastName());
-			friend2.setPassword(friend.getPassword());
-			friend2.setPosts(friend.getPosts());
-			friend2.setEmail(friend.getEmail());
-			
-			//new thing added by poho
-			friend2.setSalt(friend.getSalt());
-			return friend2;
-	 }
-	 
-	 /*
-	  * 
-	  * 
-	  * 
-	  * 
-	  * 
-	  * 
-	  * 
-	  */
-	 /*Testing Testing by Poho*/
+
+	public Friend storeFriend(Friend friend) {
+		Friend friend2 = new Friend();
+		friend2.setId(friend.getId());
+		friend2.setUsername(friend.getUsername());
+		friend2.setFirstName(friend.getFirstName());
+		friend2.setLastName(friend.getLastName());
+		friend2.setPassword(friend.getPassword());
+		friend2.setPosts(friend.getPosts());
+		friend2.setEmail(friend.getEmail());
+
+		// new thing added by poho
+		friend2.setSalt(friend.getSalt());
+		return friend2;
+	}
+
 	public boolean passwordValidation(String username, String password) {
 		PasswordAndSalt ps = new PasswordAndSalt();
 		Friend friend = getUsername(username);
-		String salt = friend.getSalt(); //getting salt from db
-		if(ps.verifyUserPassword(password, friend.getPassword(), salt)) {
+		String salt = friend.getSalt(); // getting salt from db
+
+		System.out.println("Password Validation Friend: ");
+		System.out.println(friend);
+		System.out.println("Password Validation Salt: ");
+		System.out.println(salt);
+		System.out.println("Param password: ");
+		System.out.println(password);
+		if (ps.verifyUserPassword(password, friend.getPassword(), salt)) {
+			System.out.println("ps.verified.");
 			return true;
 		}
-		
+
 		return false;
 	}
-	
+
 	public Friend getUsername(String username) {
 		List<Friend> friends = getAll();
-		for(int i = 0; i< friends.size();i++) {
-			if(username.equals(friends.get(i).getUsername())) {
-				LoggerSingleton.getLogger().info("Found friend in List by Username "+username);
+		for (int i = 0; i < friends.size(); i++) {
+			if (username.equals(friends.get(i).getUsername())) {
+				LoggerSingleton.getLogger().info("Found friend in List by Username " + username);
 				return friends.get(i);
-				
 			}
-		}	
-		LoggerSingleton.getLogger().info("FETCHED Friend object based on username: "+username);
-		return null; 
+		}
+		LoggerSingleton.getLogger().info("FETCHED Friend object based on username: " + username);
+		return new Friend();
 	}
-	
+
 	public Friend getEmail(String email) {
 		List<Friend> friends = getAll();
-		for(int i = 0; i< friends.size();i++) {
-			if(email.equals(friends.get(i).getEmail())) {
-				LoggerSingleton.getLogger().info("Found friend in List by Email "+email);
+		for (int i = 0; i < friends.size(); i++) {
+			if (email.equals(friends.get(i).getEmail())) {
+				LoggerSingleton.getLogger().info("Found friend in List by Email " + email);
 				return friends.get(i);
-				
+
 			}
-		}	
-		LoggerSingleton.getLogger().info("FETCHED Friend object based on Email: "+email);
-		return null; 
+		}
+		LoggerSingleton.getLogger().info("FETCHED Friend object based on Email: " + email);
+		return null;
 	}
 }

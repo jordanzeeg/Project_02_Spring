@@ -2,6 +2,7 @@ package com.java.dto;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
@@ -33,6 +34,7 @@ public class Post {
 
     @OneToMany( mappedBy = "post", cascade = { CascadeType.ALL })
     @LazyCollection(LazyCollectionOption.FALSE)
+	@JsonBackReference
     private List<Comment> comments;
 
     @OneToMany( mappedBy = "post", cascade = { CascadeType.ALL })

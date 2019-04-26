@@ -5,7 +5,10 @@ import java.util.List;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 @Entity
 @Table(name = "comment_tbl")
@@ -20,10 +23,15 @@ public class Comment {
 
     @ManyToOne
     @JoinColumn(name = "friend_id", nullable = false)
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    @JsonIdentityReference(alwaysAsId = true)
     private Friend author;
 
     @ManyToOne
     @JoinColumn(name = "post_id", nullable = false)
+    @JsonManagedReference
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    @JsonIdentityReference(alwaysAsId = true)
     private Post post;
 
     @Column(name = "timestamp")
@@ -31,6 +39,8 @@ public class Comment {
     private Timestamp timestamp;
 
     @OneToMany(mappedBy = "comment")
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @JsonIgnore
     private List<CommentLike> commentlikes;
 
     // Constructors

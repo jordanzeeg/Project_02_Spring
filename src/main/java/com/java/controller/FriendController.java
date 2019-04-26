@@ -144,6 +144,7 @@ public class FriendController {
 		Friend dataFriend = service.getUsername(friend.getUsername());// info from db
 		if (dataFriend == null) {
 			return ResponseEntity.ok(mess);
+
 		} else if ((friend.getUsername().equals(dataFriend.getUsername()))) {
 			if (service.passwordValidation(friend.getUsername(), friend.getPassword())) {
 				// String username = friend.getUsername();

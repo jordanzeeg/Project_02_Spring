@@ -1,19 +1,13 @@
 package com.java.controller;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -21,14 +15,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.java.dto.Friend;
-import com.java.dto.Messengering;
-import com.java.dto.Post;
-import com.java.dto.Comment;
 import com.java.dto.CommentLike;
+import com.java.dto.Messengering;
 import com.java.service.CommentLikeService;
-import com.java.service.FriendService;
-import com.java.util.LoggerSingleton;
 
 @Controller
 @RequestMapping("/commentlikes")
@@ -43,7 +32,7 @@ public class CommentLikeController {
 		List<CommentLike> commentLikes = service.getAll();
 		return ResponseEntity.ok(commentLikes);
 	}
-	@GetMapping("/byid{id}") // sets variable as part of the url
+	@GetMapping("/{id}") // sets variable as part of the url
 	public ResponseEntity<?> getCommentLikeById(@PathVariable int id){ 
 		// @Pathvariable sets the variable in the url to the parameter
 		CommentLike commentLike = new CommentLike();
@@ -53,7 +42,7 @@ public class CommentLikeController {
 			}
 		
 		
-	@GetMapping("/bycommentid{commentId}") // sets variable as part of the url
+	@GetMapping("/bycomment{commentId}") // sets variable as part of the url
 	public ResponseEntity<?> getCommentLikeByCommentId(@PathVariable int commentId) { 
 		// @Pathvariable sets the variable in the url to the parameter
 		List<CommentLike> commentLikes = service.getCommentLikeBasedOnCommentId(commentId);
@@ -88,7 +77,7 @@ public class CommentLikeController {
 		}
 	}
 	
-	@PostMapping("/delete")
+	@DeleteMapping
 	public ResponseEntity<?> DeleteCommentLike(@RequestBody CommentLike t) { 
 		// assumption of a form of some kind
 		Messengering mess = new Messengering(1,"CommentLike does not exist in Database. unable to update");

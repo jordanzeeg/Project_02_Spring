@@ -135,7 +135,7 @@ public class FriendController {
 	public ResponseEntity<?> loginTrial(@RequestBody Friend friend) {
 		Friend dataFriend = service.getUsername(friend.getUsername());// info from db
 		if (dataFriend == null) {
-			return ResponseEntity.ok("Login Trial Fail. UserName/Password Not match");
+			return ResponseEntity.ok("Login Trial Fail. Username/Password Not match");
 		} else if ((friend.getUsername().equals(dataFriend.getUsername()))) {
 			if (service.passwordValidation(friend.getUsername(), friend.getPassword())) {
 				// String username = friend.getUsername();

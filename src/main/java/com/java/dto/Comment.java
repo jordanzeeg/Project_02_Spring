@@ -27,15 +27,16 @@ public class Comment {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "post_id", nullable = false)
-    @JsonIgnore
+    @JsonIgnoreProperties("comments")
     private Post post;
 
     @Column(name = "timestamp")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd@HH:mm:ss.SSSZ")
     @CreationTimestamp
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd@HH:mm:ss.SSSZ")
     private Timestamp timestamp;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "comment")
+    @JsonIgnoreProperties("comment")
     private List<CommentLike> commentlikes;
 
     // Constructors

@@ -8,6 +8,7 @@ import javax.persistence.*;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -30,7 +31,7 @@ public class Comment {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "post_id", nullable = false)
-    @JsonIgnore
+    @JsonIgnoreProperties("comments")
     private Post post;
 
     @Column(name = "timestamp")
@@ -38,6 +39,7 @@ public class Comment {
     private Timestamp timestamp;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "comment")
+    @JsonIgnoreProperties("comment")
     private List<CommentLike> commentlikes;
 
     // Constructors

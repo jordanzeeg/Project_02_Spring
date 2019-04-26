@@ -1,19 +1,31 @@
 package com.java.dto;
 
 public class Messengering {
-	private String Menagerie;
+	private int status;
+	private String menagerie;
+
+	public int getStatus() {
+		return status;
+	}
+
+	public void setStatus(int status) {
+		this.status = status;
+	}
 
 	public String getMenagerie() {
-		return Menagerie;
+		return menagerie;
 	}
 
 	public void setMenagerie(String menagerie) {
-		Menagerie = menagerie;
+		this.menagerie = menagerie;
 	}
 
-	public Messengering(String menagerie) {
+
+
+	public Messengering(int status, String menagerie) {
 		super();
-		Menagerie = menagerie;
+		this.status = status;
+		this.menagerie = menagerie;
 	}
 
 	public Messengering() {

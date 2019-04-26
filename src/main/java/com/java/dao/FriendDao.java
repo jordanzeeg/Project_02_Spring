@@ -10,8 +10,6 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.ParameterExpression;
 import javax.persistence.criteria.Root;
 
-
-import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -27,99 +25,93 @@ public class FriendDao implements Dao<Friend> {
 	@Autowired
 	@Qualifier("sessionFactory")
 	SessionFactory sf;
-	
+
 	@Override
 	public Friend get(int id) {
-		Session s=sf.openSession();
+		Session s = sf.openSession();
 		Friend t = s.get(Friend.class, id);
 		s.close();
 		return t;
 	}
+
 	public Friend getByUsername(String username) {
 		Friend friend = new Friend();
-		Session s=sf.openSession();
-		  CriteriaBuilder cb = s.getCriteriaBuilder();
-		  s.beginTransaction(); //original
+		Session s = sf.openSession();
+		CriteriaBuilder cb = s.getCriteriaBuilder();
+		s.beginTransaction(); // original
 
-		  CriteriaQuery<Friend> q = cb.createQuery(Friend.class);
-		  Root<Friend> c = q.from(Friend.class);
-		  ParameterExpression<String> p = cb.parameter(String.class);
-		   q.select(c).where(cb.equal(c.get("username"), p));
-		   TypedQuery<Friend> query = s.createQuery(q);
-		   query.setParameter(p, username);
-		   try {
-		   friend = query.getSingleResult();
-		   }
-		   catch(NoResultException e) {
-			   LoggerSingleton.getLogger().info("Empty list created in FriendDao.getByUsername()" );
-		   }
-		   s.getTransaction().commit();
+		CriteriaQuery<Friend> q = cb.createQuery(Friend.class);
+		Root<Friend> c = q.from(Friend.class);
+		ParameterExpression<String> p = cb.parameter(String.class);
+		q.select(c).where(cb.equal(c.get("username"), p));
+		TypedQuery<Friend> query = s.createQuery(q);
+		query.setParameter(p, username);
+		try {
+			friend = query.getSingleResult();
+		} catch (NoResultException e) {
+			LoggerSingleton.getLogger().info("Empty list created in FriendDao.getByUsername()");
+		}
+		s.getTransaction().commit();
 
 		s.close();
 
 		return friend;
 	}
-	
 
 	@Override
-	public List<Friend> getAll() { //create the list using criteriaBuilder
+	public List<Friend> getAll() { // create the list using criteriaBuilder
 		List<Friend> list = new ArrayList<Friend>();
-		Session session=sf.openSession();
+		Session session = sf.openSession();
 		session.beginTransaction();
-		//Use nondeprecated things to do criteria
+		// Use nondeprecated things to do criteria
 		CriteriaBuilder builder = session.getCriteriaBuilder();
 		CriteriaQuery<Friend> criteriaQuery = builder.createQuery(Friend.class);
 		criteriaQuery.from(Friend.class);
-		try
-		{
-		list = session.createQuery(criteriaQuery).getResultList(); //call session 
-		}
-		catch(NoResultException e){
-			LoggerSingleton.getLogger().info("Empty list created in FriendDao.getAll()" );	
+		try {
+			list = session.createQuery(criteriaQuery).getResultList(); // call session
+		} catch (NoResultException e) {
+			LoggerSingleton.getLogger().info("Empty list created in FriendDao.getAll()");
 		}
 		session.getTransaction().commit();
 		session.close();
 		return list;
 	}
-	
-	
-	//insert friend into the database if friend does not exist
+
+	// insert friend into the database if friend does not exist
 	@Override
 	public void save(Friend t) {
 		LoggerSingleton.getLogger().info("In the save method");
-		Session s =sf.openSession();
+		Session s = sf.openSession();
 
-		Transaction tx = s.beginTransaction(); //changed by Poho
-		//s.beginTransaction(); original
+		Transaction tx = s.beginTransaction(); // changed by Poho
+		// s.beginTransaction(); original
 		s.save(t);
-		//s.getTransaction().commit(); //original
-		tx.commit(); //changed by Poho
+		// s.getTransaction().commit(); //original
+		tx.commit(); // changed by Poho
 
 		s.close();
 	}
 
-	
-	//update the information for a friend that already exists
+	// update the information for a friend that already exists
 	@Override
 	public void update(Friend t) {
 		Session s = sf.openSession();
 		s.beginTransaction();
 		s.update(t);
 		s.getTransaction().commit();
-		s.close();		
-		
+		s.close();
+
 	}
 
-	
-	//delete object for a friend that currently exists
+	// delete object for a friend that currently exists
 	@Override
 	public void delete(Friend t) {
-		Session s=sf.openSession();
+		Session s = sf.openSession();
 		s.beginTransaction();
 		s.delete(t);
 		s.getTransaction().commit();
 		s.close();
-		
+
 	}
 
 }

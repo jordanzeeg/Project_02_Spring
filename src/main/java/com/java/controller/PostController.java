@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.java.dto.Messengering;
 import com.java.dto.Post;
 import com.java.service.PostService;
 
@@ -47,7 +48,6 @@ public class PostController {
 
 	// TODO don't throw exception
 	@GetMapping("/getpostsbyuser{authorId}") // pass in user id
-
 	public ResponseEntity<?> GetPostsByUserId(@PathVariable int authorId) {
 		List<Post> posts = new ArrayList<Post>();
 		posts = service.getPostByAuthorId(authorId);
@@ -57,10 +57,10 @@ public class PostController {
 	@GetMapping("/byid{id}") // sets variable as part of the url
 	public ResponseEntity<?> getPostById(@PathVariable int id) {
 		// @Pathvariable sets the variable in the url to the parameter
-
+		Messengering mess = new Messengering("Post not found");
 		Post post = service.get(id);
 		if (post == null) {
-			return ResponseEntity.ok(0);
+			return ResponseEntity.ok(mess);
 		} else {
 			return ResponseEntity.ok(post);
 
@@ -82,50 +82,42 @@ public class PostController {
 		// TODO getPostsbyPostId
 	}
 
-//		@GetMapping("/getbypostid") //will add if we have time
-//		public void getPostByPostId(@PathVariable int postId, HttpServletResponse response) throws IOException{
-//				
-//		}
-//		@PostMapping
-//		public void SavePost(@Valid @ModelAttribute Post post, BindingResult result, HttpServletResponse response) throws IOException { 
-//			// assumption of a form of some kind
-//			if (result.hasErrors()) {
-//				response.getWriter().println("Inserted unsuccessfully");
-//				
-//			}
-//			service.save(post);
-//			response.getWriter().println("Inserted successfully");
-//		}
+
 	@PostMapping()
 	public ResponseEntity<?> SavePost(@RequestBody Post post) {
+		Messengering mess = new Messengering("Post already exists in Database");
+		Messengering success = new Messengering("Post not found in Database. Save successful");
 		if (post.getId() == 0) {
 			service.save(post);
 			
-			return ResponseEntity.ok().body("Post saved with Title = " + post.getTitle() + " id = " + post.getId());
+			return ResponseEntity.ok(success);
 		} else
-			return ResponseEntity.ok(0); 
+			return ResponseEntity.ok(mess); 
 	}
 
 	@PutMapping
 	public ResponseEntity<?> UpdatePost(@RequestBody Post post) {
 		// assumption of a form of some kind
+		Messengering mess = new Messengering("Post not found in Database");
+		Messengering success = new Messengering("Post updated found in Database");
 		if (service.get(post.getId()).getId() == 0) { // TODO ask people if null is what get actually returns
-			return ResponseEntity.ok("post is not currently in database. save post first");
+			return ResponseEntity.ok(mess);
 		} else {
 			service.update(post);
-			return ResponseEntity.ok("Inserted successfully");
+			return ResponseEntity.ok(success);
 		}
 	}
 
 	@DeleteMapping
 	public ResponseEntity<?> DeletePost(@RequestBody Post post) {
 		// assumption of a form of some kind
-
+		Messengering mess = new Messengering("Post not found in Database");
+		Messengering success = new Messengering("Post deleted in Database");
 		if (post.getId()==0) { // TODO ask people if null is what get actually returns
-			return ResponseEntity.ok("post is not currently in database. create post first");
+			return ResponseEntity.ok(mess);
 		} else {
 			service.delete(post);
-			return ResponseEntity.ok("Deleted successfully. It wasn't a good post anyway");
+			return ResponseEntity.ok(success);
 		}
 	}
 

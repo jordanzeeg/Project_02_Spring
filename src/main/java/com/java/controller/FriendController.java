@@ -42,7 +42,7 @@ public class FriendController {
 
 	public ResponseEntity<?> getFriendById(@PathVariable("id") int id) throws IOException {
 		// @Pathvariable sets the variable in the url to the parameter
-		Messengering mess = new Messengering("Friend currently is not in database");
+		Messengering mess = new Messengering(1, "Friend currently is not in database");
 
 		Friend friend = service.get(id);
 		if (friend == null) {
@@ -68,12 +68,11 @@ public class FriendController {
 //	}
 	@PostMapping()
 	public ResponseEntity<?> SaveFriend(@RequestBody Friend friend) {
-		Messengering mess = new Messengering("Friend already exists in Database");
-		Messengering success = new Messengering("Friend not found in Database. Save successful");
+		Messengering mess = new Messengering(7, "Friend already exists in Database");
+		Messengering success = new Messengering(0, "Friend not found in Database. Save successful");
 		Friend dataFriend = service.getByUsername(friend.getUsername());
 		if (dataFriend.getId() == 0) {
 			service.save(friend);
-			String username = friend.getUsername();
 			return ResponseEntity.ok().body(success);
 		} else
 			return ResponseEntity.ok(mess);
@@ -81,8 +80,8 @@ public class FriendController {
 
 	@PutMapping() // "/byid{id}"
 	public ResponseEntity<?> UpdateFriend(@RequestBody Friend friend) throws IOException {
-		Messengering mess = new Messengering("Friend not found in Database");
-		Messengering success = new Messengering("Friend exists in Database. Update successful");
+		Messengering mess = new Messengering(7, "Friend not found in Database");
+		Messengering success = new Messengering(0, "Friend exists in Database. Update successful");
 		Friend dataFriend = service.getByUsername(friend.getUsername());
 		if (dataFriend.getId() == 0) { // TODO ask people if null is what get actually returns
 			// response.getWriter().println("friend is not currently in database. save
@@ -95,13 +94,12 @@ public class FriendController {
 		}
 	}
 
-	@DeleteMapping("/{id}")
-	public ResponseEntity<?> DeleteFriend(@PathVariable("id") int id) {
+	@DeleteMapping
+	public ResponseEntity<?> DeleteFriend(@RequestBody Friend friend) {
 		// assumption of a form of some kind
-		Messengering mess = new Messengering("Friend not found in Database");
-		Messengering success = new Messengering("Friend exists in Database. Delete successful");
-		Friend friend = service.get(id);
-		if (friend == null) { // TODO ask people if null is what get actually returns
+		Messengering mess = new Messengering(1, "Friend not found in Database");
+		Messengering success = new Messengering(0, "Friend exists in Database. Delete successful");
+		if (friend.getId() != service.get(friend.getId()).getId()) { // checks if friend is in database by id
 			return ResponseEntity.ok().body(mess);
 		} else {
 			service.delete(friend);
@@ -109,20 +107,11 @@ public class FriendController {
 		}
 	}
 
-	/*
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * Testing Testing by Poho
-	 */
 	@PostMapping("/register")
 	public ResponseEntity<?> registerFriend(@RequestBody Friend friend) {
-		Messengering mess = new Messengering("Username already existed. Please use a different username");
-		Messengering mess2 = new Messengering("Email already existed. Please use a different username");
-		Messengering success = new Messengering("Friend now exists in Database. Registration successful");
+		Messengering mess = new Messengering(7, "Username already existed. Please use a different username");
+		Messengering mess2 = new Messengering(2, "Email already existed. Please use a different username");
+		Messengering success = new Messengering(0, "Friend now exists in Database. Registration successful");
 		Friend dataFriend = service.getUsername(friend.getUsername());
 		Friend emailFriend = service.getEmail(friend.getEmail());
 		if (dataFriend != null) {
@@ -132,7 +121,7 @@ public class FriendController {
 			return ResponseEntity.ok().body(mess2);
 		}
 		service.save(friend);
-		String username = friend.getUsername();
+//		String username = friend.getUsername();
 		return ResponseEntity.ok().body(success);
 		// }
 		// else return ResponseEntity.ok("Friend already in database." + dataFriend);
@@ -140,8 +129,10 @@ public class FriendController {
 
 	@PostMapping("/login")
 	public ResponseEntity<?> loginTrial(@RequestBody Friend friend) {
-		Messengering mess = new Messengering("Login Failed. UserName/Password did not match");
-		Messengering success = new Messengering("Login successful");
+
+		Messengering mess = new Messengering(7, "Login Failed. UserName/Password Not match");
+		Messengering success = new Messengering(0, "Login successful");
+
 		Friend dataFriend = service.getUsername(friend.getUsername());// info from db
 		System.out.println("Param friend: ");
 		System.out.println(friend);

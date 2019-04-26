@@ -63,8 +63,8 @@ public class CommentLikeController {
 	@PostMapping
 	public ResponseEntity<?> SaveCommentLike(@RequestBody CommentLike t){ 
 		// assumption of a form of some kind
-		Messengering mess = new Messengering("CommentLike already exists in Database. unable to update");
-		Messengering success = new Messengering("Save successful");
+		Messengering mess = new Messengering(1,"CommentLike already exists in Database. unable to update");
+		Messengering success = new Messengering(0,"Save successful");
 
 		if(t.getId()== 0) {
 		service.save(t);
@@ -76,8 +76,8 @@ public class CommentLikeController {
 	@PutMapping
 	public ResponseEntity<?> UpdateCommentLike(@RequestBody CommentLike t) {
 		// assumption of a form of some kind
-		Messengering mess = new Messengering("CommentLike does not exist in Database. unable to update");
-		Messengering success = new Messengering("CommentLike found in Database. Update successful");
+		Messengering mess = new Messengering(1,"CommentLike does not exist in Database. unable to update");
+		Messengering success = new Messengering(0,"CommentLike found in Database. Update successful");
 		if (t.getId()== 0) {
 			return ResponseEntity.ok(mess);
 		}else {
@@ -89,8 +89,8 @@ public class CommentLikeController {
 	@PostMapping("/delete")
 	public ResponseEntity<?> DeleteCommentLike(@RequestBody CommentLike t) { 
 		// assumption of a form of some kind
-		Messengering mess = new Messengering("CommentLike does not exist in Database. unable to update");
-		Messengering success = new Messengering("CommentLike found in Database. Delete successful");
+		Messengering mess = new Messengering(1,"CommentLike does not exist in Database. unable to update");
+		Messengering success = new Messengering(0,"CommentLike found in Database. Delete successful");
 		if (t.getId()== 0) {
 			return ResponseEntity.ok(mess);
 		}

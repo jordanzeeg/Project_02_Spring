@@ -140,18 +140,24 @@ public class FriendController {
 
 	@PostMapping("/login")
 	public ResponseEntity<?> loginTrial(@RequestBody Friend friend) {
-		Messengering mess = new Messengering("Login Failed. UserName/Password Not match");
+		Messengering mess = new Messengering("Login Failed. UserName/Password did not match");
 		Messengering success = new Messengering("Login successful");
 		Friend dataFriend = service.getUsername(friend.getUsername());// info from db
+		System.out.println("Param friend: ");
+		System.out.println(friend);
+		System.out.println("Data Friend: ");
+		System.out.println(dataFriend);
 		if (dataFriend == null) {
+			System.out.println("dataFriend was null");
 			return ResponseEntity.ok(mess);
-
-		} else if ((friend.getUsername().equals(dataFriend.getUsername()))) {
-			if (service.passwordValidation(friend.getUsername(), friend.getPassword())) {
-				// String username = friend.getUsername();
-				return ResponseEntity.ok().body(success);
-			}
 		}
+
+		if (service.passwordValidation(friend.getUsername(), friend.getPassword())) {
+			System.out.println("Password validated");
+			return ResponseEntity.ok().body(success);
+		}
+
+		System.out.println("Outside of ifs for some reason.");
 		return ResponseEntity.ok(mess);
 
 	}

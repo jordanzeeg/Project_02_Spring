@@ -1,8 +1,5 @@
 /*
- * 
- * Source: http://appsdeveloperblog.com/encrypt-user-password-example-java/
- * 
- * 
+ * Source: http://appsdeveloperblog.com/encrypt-user-password-example-java/ 
  */
 
 package com.java.salt;

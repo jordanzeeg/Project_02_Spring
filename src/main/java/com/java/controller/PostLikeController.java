@@ -54,7 +54,7 @@ public class PostLikeController {
 //	public void getPostLikeByPostId(@PathVariable int postId, HttpServletResponse response) throws IOException{
 //			
 //	}
-	@PostMapping()
+	@PostMapping
 	public ResponseEntity<?> SavePostLike(@RequestBody PostLike t) { 
 		Messengering mess = new Messengering(1,"PostLike already exists in Database. unable to update");
 		Messengering success = new Messengering(0,"Save successful");

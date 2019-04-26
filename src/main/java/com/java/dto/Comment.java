@@ -7,8 +7,15 @@ import javax.persistence.*;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
 @Table(name = "comment_tbl")
+
 public class Comment {
     @Id
     @GeneratedValue
@@ -18,19 +25,21 @@ public class Comment {
     @Column(name = "description")
      private String description;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "friend_id", nullable = false)
+    @JsonIgnore
     private Friend author;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "post_id", nullable = false)
+    @JsonIgnore
     private Post post;
 
     @Column(name = "timestamp")
     @CreationTimestamp
     private Timestamp timestamp;
 
-    @OneToMany(mappedBy = "comment")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "comment")
     private List<CommentLike> commentlikes;
 
     // Constructors

@@ -15,6 +15,7 @@ import java.io.File;
 
 @RestController
 @RequestMapping("profile_image")
+@CrossOrigin(origins = "http://localhost:4200")
 public class ProfileImageController {
 
     // Credentials for S3 TODO: - figure out way not to hardcode this in controller

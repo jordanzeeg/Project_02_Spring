@@ -5,22 +5,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -36,8 +31,6 @@ public class PostController {
 	@Autowired
 	PostService service;
 
-	// TODO don't throw exception
-
 	@GetMapping
 	@ResponseBody
 	public ResponseEntity<?> getPosts() throws IOException {
@@ -46,9 +39,8 @@ public class PostController {
 		// return ResponseEntity.ok().body(responseString.toString());
 	}
 
-
-	// TODO don't throw exception
-	@GetMapping("/byuser{authorId}") // pass in user id
+	
+	@GetMapping("/{authorId}") // pass in user id
 	public ResponseEntity<?> GetPostsByUserId(@PathVariable int authorId) {
 		List<Post> posts = new ArrayList<Post>();
 		posts = service.getPostByAuthorId(authorId);
@@ -58,7 +50,7 @@ public class PostController {
 	@GetMapping("/{id}") // sets variable as part of the url
 	public ResponseEntity<?> getPostById(@PathVariable int id) {
 		// @Pathvariable sets the variable in the url to the parameter
-		Messengering mess = new Messengering(1,"Post not found");
+		Messengering mess = new Messengering(1, "Post not found");
 		Post post = service.get(id);
 		if (post == null) {
 			return ResponseEntity.ok(mess);
@@ -71,37 +63,30 @@ public class PostController {
 	@GetMapping("/={title}") // sets variable as part of the url
 	public void getPostByUsername(@PathVariable String title, HttpServletResponse response) throws IOException {
 		// @Pathvariable sets the variable in the url to the parameter
-		
+
 		List<Post> post = service.getPostByTitle(title);
-	
-			ResponseEntity.ok(post);
-		
-		// TODO don't throw exception
 
-		// TODO CRUD FRIENDS
-		// TODO getpostbyname
-		// TODO getPostsbyPostId
+		ResponseEntity.ok(post);
 	}
-
 
 	@PostMapping
 	public ResponseEntity<?> SavePost(@RequestBody Post post) {
-		Messengering mess = new Messengering(1,"Post already exists in Database");
-		Messengering success = new Messengering(0,"Post not found in Database. Save successful");
+		Messengering mess = new Messengering(1, "Post already exists in Database");
+		Messengering success = new Messengering(0, "Post not found in Database. Save successful");
 		if (post.getId() == 0) {
 			service.save(post);
-			
+
 			return ResponseEntity.ok(success);
 		} else
-			return ResponseEntity.ok(mess); 
+			return ResponseEntity.ok(mess);
 	}
 
-	@PutMapping
+	@PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> UpdatePost(@RequestBody Post post) {
 		// assumption of a form of some kind
-		Messengering mess = new Messengering(1,"Post not found in Database");
-		Messengering success = new Messengering(0,"Post updated found in Database");
-		if (service.get(post.getId()).getId() == 0) { // TODO ask people if null is what get actually returns
+		Messengering mess = new Messengering(1, "Post not found in Database");
+		Messengering success = new Messengering(0, "Post updated found in Database");
+		if (service.get(post.getId()).getId() == 0) {
 			return ResponseEntity.ok(mess);
 		} else {
 			service.update(post);
@@ -112,9 +97,9 @@ public class PostController {
 	@DeleteMapping
 	public ResponseEntity<?> DeletePost(@RequestBody Post post) {
 		// assumption of a form of some kind
-		Messengering mess = new Messengering(1,"Post not found in Database");
-		Messengering success = new Messengering(0,"Post deleted in Database");
-		if (post.getId()==0) { // TODO ask people if null is what get actually returns
+		Messengering mess = new Messengering(1, "Post not found in Database");
+		Messengering success = new Messengering(0, "Post deleted in Database");
+		if (post.getId() == 0) { 
 			return ResponseEntity.ok(mess);
 		} else {
 			service.delete(post);
@@ -122,10 +107,4 @@ public class PostController {
 		}
 	}
 
-
-
 }
-
-// TODO CRUD Posts
-// TODO getPostsbyId
-// TODO getpostsbyuser

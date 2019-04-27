@@ -7,13 +7,12 @@ import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.*;
-import org.springframework.http.MediaType;
+import com.java.util.LoggerSingleton;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 
 
 @RestController
@@ -23,8 +22,8 @@ public class ProfileImageController {
 
     // Credentials for S3 TODO: - figure out way not to hardcode this in controller
     AWSCredentials credentials =
-            new BasicAWSCredentials("",
-                    ""
+            new BasicAWSCredentials("AKIAUSWONA5PAOG6MZGL",
+                    "mD2xvUOZLZtnFIenWjTNnBtmBJvAMbLSOmnsd5D4"
             );
     // BucketName for S3 service
     String bucketName = "faceyourbookspace";
@@ -36,42 +35,34 @@ public class ProfileImageController {
             .withRegion(Regions.US_EAST_2)
             .build();
 
-
-    //@PostMapping("/upload")
-    @RequestMapping(value = "/file", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody String saveProfilePic(@RequestParam("username") String username,
-                                            @RequestParam("file") MultipartFile file) {
+    @PostMapping("/upload")
+    public ResponseEntity<?> saveProfilePic(@RequestParam("username") String username,
+                                            @RequestParam("file")MultipartFile file) throws IOException {
         // Key to get specific user's folder
         String key = "user_profile_pic/" + username + "/profile_pic";
-
-        // boolean to determine if user folder exists
-        boolean exists = s3client.doesObjectExist(bucketName, key);
+        String URI = "Failed to retrieve file";
         ObjectMetadata objectMetadata = new ObjectMetadata();
+        objectMetadata.setContentType("image/jpeg");
 
-        // Check if folder exists, if so delete it and replace it with new one (changing profle pic) else create a
-        // file with profile pic
-        if (exists) {
-            s3client.deleteObject(bucketName, key);
-            try {
-                s3client.putObject(new PutObjectRequest(bucketName, key, file.getInputStream(), objectMetadata).withCannedAcl(CannedAccessControlList.PublicRead));
-            } catch (IOException e) {
-                e.printStackTrace();
+        try {
+            InputStream is = file.getInputStream();
+            boolean exists = s3client.doesObjectExist(bucketName, key);
+            if (exists) {
+                s3client.deleteObject(bucketName, key);
+                s3client.putObject(new PutObjectRequest(bucketName, key, is, objectMetadata).withCannedAcl(CannedAccessControlList.PublicRead));
+            } else {
+                s3client.putObject(new PutObjectRequest(bucketName, key, is, objectMetadata).withCannedAcl(CannedAccessControlList.PublicRead));
             }
-        } else {
-            try {
-                s3client.putObject(new PutObjectRequest(bucketName, key, file.getInputStream(), objectMetadata).withCannedAcl(CannedAccessControlList.PublicRead));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            S3Object s3Object =  s3client.getObject(new GetObjectRequest(bucketName, key));
+            URI = s3Object.getObjectContent().getHttpRequest().getURI().toString();
+           ;
+        } catch(IOException e) {
+            LoggerSingleton.getLogger().info("Failed to retrieve file");
+            e.printStackTrace();
         }
 
-        // Get object from file
-        S3Object s3Object = s3client.getObject(new GetObjectRequest(bucketName, key));
+        return ResponseEntity.ok().body(URI);
 
-        // Get URI of object from AWS
-        String URI = s3Object.getObjectContent().getHttpRequest().getURI().toString();
-
-        return URI;
     }
 
     @GetMapping("/image")

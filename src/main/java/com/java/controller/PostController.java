@@ -38,11 +38,10 @@ public class PostController {
 
 	// TODO don't throw exception
 
-	@GetMapping(consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	@ResponseBody()
+	@GetMapping
+	@ResponseBody
 	public ResponseEntity<?> getPosts() throws IOException {
 		List<Post> posts = service.getAll();
-		System.out.println(posts);
 		return ResponseEntity.ok(posts); // copied from video tutorial by b2 Tech
 		// return ResponseEntity.ok().body(responseString.toString());
 	}

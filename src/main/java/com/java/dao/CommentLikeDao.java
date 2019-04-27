@@ -1,7 +1,6 @@
 package com.java.dao;
 
 import java.util.List;
-import java.util.Optional;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -12,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
-import com.java.dto.Friend;
 import com.java.dto.CommentLike;
 
 @Repository

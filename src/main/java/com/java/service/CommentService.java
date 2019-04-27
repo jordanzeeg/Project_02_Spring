@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import com.java.dao.CommentDao;
 import com.java.dto.Comment;
-import com.java.dto.CommentLike;
 import com.java.util.LoggerSingleton;
 
 @Service

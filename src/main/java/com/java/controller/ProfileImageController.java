@@ -26,13 +26,14 @@ import com.amazonaws.services.s3.model.S3Object;
 
 
 @RestController
+@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/profile_image")
 public class ProfileImageController {
 
     // Credentials for S3 TODO: - figure out way not to hardcode this in controller
     AWSCredentials credentials =
-            new BasicAWSCredentials("AKIAUSWONA5PAOG6MZGL",
-                    "mD2xvUOZLZtnFIenWjTNnBtmBJvAMbLSOmnsd5D4"
+            new BasicAWSCredentials("",
+                    ""
             );
     // BucketName for S3 service
     String bucketName = "faceyourbookspace";

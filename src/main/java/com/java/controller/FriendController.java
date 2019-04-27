@@ -133,20 +133,13 @@ public class FriendController {
 		Messengering success = new Messengering(0, "Login successful");
 
 		Friend dataFriend = service.getUsername(friend.getUsername());// info from db
-		System.out.println("Param friend: ");
-		System.out.println(friend);
-		System.out.println("Data Friend: ");
-		System.out.println(dataFriend);
 		if (dataFriend == null) {
-			System.out.println("dataFriend was null");
 			return ResponseEntity.ok(mess);
 		}
 		if (service.passwordValidation(friend.getUsername(), friend.getPassword())) {
-			System.out.println("Password validated");
 			return ResponseEntity.ok().body(success);
 		}
 
-		System.out.println("Outside of ifs for some reason.");
 		return ResponseEntity.ok(mess);
 
 	}

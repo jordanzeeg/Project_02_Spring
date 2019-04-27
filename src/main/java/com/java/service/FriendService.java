@@ -103,14 +103,7 @@ public class FriendService implements FriendServiceInterface<Friend> {
 		Friend friend = getUsername(username);
 		String salt = friend.getSalt(); // getting salt from db
 
-		System.out.println("Password Validation Friend: ");
-		System.out.println(friend);
-		System.out.println("Password Validation Salt: ");
-		System.out.println(salt);
-		System.out.println("Param password: ");
-		System.out.println(password);
 		if (ps.verifyUserPassword(password, friend.getPassword(), salt)) {
-			System.out.println("ps.verified.");
 			return true;
 		}
 

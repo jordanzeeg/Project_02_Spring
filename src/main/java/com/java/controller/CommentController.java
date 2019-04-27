@@ -20,6 +20,7 @@ import com.java.service.CommentService;
 
 @Controller
 @RequestMapping("/comments")
+@CrossOrigin(origins = "http://localhost:4200")
 public class CommentController {
 	@Autowired
 	CommentService service;

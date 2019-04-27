@@ -35,12 +35,12 @@ public class ProfileImageController {
             .withRegion(Regions.US_EAST_2)
             .build();
 
-    @PostMapping("/upload")
+    @PostMapping()
     public ResponseEntity<?> saveProfilePic(@RequestParam("username") String username,
                                             @RequestParam("file")MultipartFile file) throws IOException {
         // Key to get specific user's folder
         String key = "user_profile_pic/" + username + "/profile_pic";
-        String URI = "Failed to retrieve file";
+        String URI = "Failed to save file";
         ObjectMetadata objectMetadata = new ObjectMetadata();
         objectMetadata.setContentType("image/jpeg");
 
@@ -55,9 +55,9 @@ public class ProfileImageController {
             }
             S3Object s3Object =  s3client.getObject(new GetObjectRequest(bucketName, key));
             URI = s3Object.getObjectContent().getHttpRequest().getURI().toString();
-           ;
+
         } catch(IOException e) {
-            LoggerSingleton.getLogger().info("Failed to retrieve file");
+            LoggerSingleton.getLogger().info("Failed to save file file");
             e.printStackTrace();
         }
 
@@ -65,7 +65,7 @@ public class ProfileImageController {
 
     }
 
-    @GetMapping("/image")
+    @GetMapping()
     public ResponseEntity<?> getProfilePicByUsername(@RequestParam("username") String username) {
         // Key to get specific user's folder
         String key = "user_profile_pic/" + username + "/profile_pic";

@@ -27,7 +27,10 @@ import com.java.service.FriendService;
 public class FriendController {
 	@Autowired
 	FriendService service;
-
+	
+	@Autowired
+	UuidclassService uuidservice;
+	
 	@GetMapping
 	@ResponseBody
 	public ResponseEntity<?> getFriends() throws IOException {
@@ -70,6 +73,7 @@ public class FriendController {
 	public ResponseEntity<?> SaveFriend(@RequestBody Friend friend) {
 		Messengering mess = new Messengering(7, "Friend already exists in Database");
 		Messengering success = new Messengering(0, "Friend not found in Database. Save successful");
+		
 		Friend dataFriend = service.getByUsername(friend.getUsername());
 		if (dataFriend.getId() == 0) {
 			service.save(friend);

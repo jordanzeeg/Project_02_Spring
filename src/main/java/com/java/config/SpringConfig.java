@@ -63,7 +63,7 @@ public class SpringConfig {
         Properties hibernateProperties = new Properties();
         hibernateProperties.setProperty(Environment.SHOW_SQL, "true");
         hibernateProperties.setProperty(Environment.DIALECT, "org.hibernate.dialect.Oracle12cDialect");
-        hibernateProperties.setProperty(Environment.HBM2DDL_AUTO, "create");
+        hibernateProperties.setProperty(Environment.HBM2DDL_AUTO, "update");
         factoryBean.setAnnotatedClasses(Friend.class, PostLike.class, Post.class, Comment.class, CommentLike.class, Uuidclass.class);
         factoryBean.setHibernateProperties(hibernateProperties);
         factoryBean.afterPropertiesSet();

@@ -44,6 +44,7 @@ public class FriendService implements FriendServiceInterface<Friend> {
 		t.setPassword(passwordToDB); // setting encrypted password to be save in the db
 
 		dao.save(t);
+		
 		LoggerSingleton.getLogger().info("SAVED a Friend object to database");
 
 	}

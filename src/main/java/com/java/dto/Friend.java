@@ -1,5 +1,8 @@
 package com.java.dto;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 import org.hibernate.mapping.Join;
@@ -11,6 +14,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Table(name = "FRIEND")
@@ -39,18 +43,24 @@ public class Friend {
     private String email;
 
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.ALL })
-    @JoinTable(
-            name = "FRIEND_POST",
-            joinColumns = {@JoinColumn(name = "friend_id")},
-            inverseJoinColumns = {@JoinColumn(name = "post_id")}
-    )
+    @ManyToMany( mappedBy = "friends",fetch = FetchType.EAGER, cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE
+        })
+    @Fetch(value = FetchMode.SUBSELECT)
     @JsonIgnoreProperties("friends")
     private List<Post> posts;
 
-    
-    //TODO: - add property for profile pic (S3)
+//    //TODO heres a marker if this fails
+//    @JsonIgnore
+//	 @OneToOne(mappedBy = "friend", cascade = { CascadeType.ALL })
+//    @LazyCollection(LazyCollectionOption.FALSE)
+//    private Uuidclass uuid;
 
+  @GeneratedValue(generator = "uuid")
+  @GenericGenerator(name = "uuid", strategy = "uuid2")
+	@Column(name = "resetkey")
+	private UUID resetkey;
     // Constructors
 
     public Friend() {
@@ -67,9 +77,11 @@ public class Friend {
         this.posts = posts;
     }
 
+    
     // Getters and Setters
 
-    public int getId() {
+
+	public int getId() {
         return id;
     }
 
@@ -154,5 +166,13 @@ public class Friend {
   this.email = email;
   this.salt = salt;
 }
+
+//	public Uuidclass getUuid() {
+//		return uuid;
+//	}
+//
+//	public void setUuid(Uuidclass uuid) {
+//		this.uuid = uuid;
+//	}
 
 }

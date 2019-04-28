@@ -19,7 +19,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.java.dto.Friend;
 import com.java.dto.Messengering;
+import com.java.dto.Uuidclass;
 import com.java.service.FriendService;
+import com.java.service.UuidclassService;
 
 @RestController
 @RequestMapping("/friends")
@@ -27,7 +29,9 @@ import com.java.service.FriendService;
 public class FriendController {
 	@Autowired
 	FriendService service;
+	
 
+	
 	@GetMapping
 	@ResponseBody
 	public ResponseEntity<?> getFriends() throws IOException {
@@ -70,9 +74,12 @@ public class FriendController {
 	public ResponseEntity<?> SaveFriend(@RequestBody Friend friend) {
 		Messengering mess = new Messengering(7, "Friend already exists in Database");
 		Messengering success = new Messengering(0, "Friend not found in Database. Save successful");
+		Uuidclass uuid = new Uuidclass();
 		Friend dataFriend = service.getByUsername(friend.getUsername());
 		if (dataFriend.getId() == 0) {
+			uuid.setFriend(friend);
 			service.save(friend);
+			
 			return ResponseEntity.ok().body(success);
 		} else
 			return ResponseEntity.ok(mess);
@@ -114,7 +121,7 @@ public class FriendController {
 		Messengering success = new Messengering(0, "Friend now exists in Database. Registration successful");
 		Friend dataFriend = service.getUsername(friend.getUsername());
 		Friend emailFriend = service.getEmail(friend.getEmail());
-		if (dataFriend != null) {
+		if (dataFriend.getId()!= 0) {
 			return ResponseEntity.ok().body(mess);
 		}
 		if (emailFriend != null) {
@@ -134,7 +141,7 @@ public class FriendController {
 		Messengering success = new Messengering(0, "Login successful");
 
 		Friend dataFriend = service.getUsername(friend.getUsername());// info from db
-		if (dataFriend == null) {
+		if (dataFriend.getId()==0) {
 			return ResponseEntity.ok(mess);
 		}
 

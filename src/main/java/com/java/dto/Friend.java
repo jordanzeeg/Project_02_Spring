@@ -39,12 +39,10 @@ public class Friend {
     private String email;
 
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.ALL })
-    @JoinTable(
-            name = "FRIEND_POST",
-            joinColumns = {@JoinColumn(name = "friend_id")},
-            inverseJoinColumns = {@JoinColumn(name = "post_id")}
-    )
+    @ManyToMany( mappedBy = "friends",fetch = FetchType.EAGER, cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE
+        })
     @JsonIgnoreProperties("friends")
     private List<Post> posts;
 

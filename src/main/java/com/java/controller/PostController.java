@@ -70,7 +70,7 @@ public class PostController {
 	}
 
 	@GetMapping("/={title}") // sets variable as part of the url
-	public void getPostByUsername(@PathVariable String title, HttpServletResponse response) throws IOException {
+	public void getPostByTitle(@PathVariable String title) {
 		// @Pathvariable sets the variable in the url to the parameter
 		
 		List<Post> post = service.getPostByTitle(title);

@@ -51,17 +51,16 @@ public class Friend {
     @JsonIgnoreProperties("friends")
     private List<Post> posts;
 
-    //TODO heres a marker if this fails
-    @JsonIgnore
-	 @OneToOne(mappedBy = "friend", cascade = { CascadeType.ALL })
-    @LazyCollection(LazyCollectionOption.FALSE)
-    private Uuidclass uuid;
+//    //TODO heres a marker if this fails
+//    @JsonIgnore
+//	 @OneToOne(mappedBy = "friend", cascade = { CascadeType.ALL })
+//    @LazyCollection(LazyCollectionOption.FALSE)
+//    private Uuidclass uuid;
 
-//	@Id
-//  @GeneratedValue(generator = "uuid")
-//  @GenericGenerator(name = "uuid", strategy = "uuid2")
-//	@Column(name = "resetkey")
-//	private UUID resetkey;
+  @GeneratedValue(generator = "uuid")
+  @GenericGenerator(name = "uuid", strategy = "uuid2")
+	@Column(name = "resetkey")
+	private UUID resetkey;
     // Constructors
 
     public Friend() {

@@ -2,17 +2,25 @@ package com.java.dao;
 
 import java.util.List;
 
+import javax.persistence.NoResultException;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.ParameterExpression;
+import javax.persistence.criteria.Root;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Repository;
 
+import com.java.dto.Friend;
 import com.java.dto.PostLike;
 import com.java.dto.Uuidclass;
+import com.java.util.LoggerSingleton;
 
+@Repository
 public class UuidDao implements Dao<Uuidclass> {
 	
 	@Autowired
@@ -20,14 +28,32 @@ public class UuidDao implements Dao<Uuidclass> {
 	SessionFactory sf;
 	
 	
-	@Override
-	public Uuidclass get(int id) {
-		Session s=sf.openSession();
-		Uuidclass t = s.get(Uuidclass.class, id);
+	//doesn't work
+	public Uuidclass get(Friend friend) {
+		Uuidclass uuid = new Uuidclass();
+		String username = friend.getUsername();
+		Session s = sf.openSession();
+		CriteriaBuilder cb = s.getCriteriaBuilder();
+		s.beginTransaction(); // original
+
+		CriteriaQuery<Uuidclass> q = cb.createQuery(Uuidclass.class);
+		Root<Uuidclass> c = q.from(Uuidclass.class);
+		ParameterExpression<String> p = cb.parameter(String.class);
+		q.select(c).where(cb.equal(c.get("username"), p));
+		TypedQuery<Uuidclass> query = s.createQuery(q);
+		query.setParameter(p, username);
+		try {
+			uuid = query.getSingleResult();
+		} catch (NoResultException e) {
+			LoggerSingleton.getLogger().info("Empty list created in FriendDao.getByUsername()");
+		}
+		s.getTransaction().commit();
+
 		s.close();
-		return t;
-	
+
+		return uuid;
 	}
+	
 
 	@Override
 	public List<Uuidclass> getAll() {
@@ -35,9 +61,9 @@ public class UuidDao implements Dao<Uuidclass> {
 		
 		//Use nondeprecated things to do criteria
 		CriteriaBuilder builder = session.getCriteriaBuilder();
-		CriteriaQuery<PostLike> criteriaQuery = builder.createQuery(PostLike.class);
-		criteriaQuery.from(PostLike.class);
-		List<PostLike> list = session.createQuery(criteriaQuery).getResultList(); //call session 
+		CriteriaQuery<Uuidclass> criteriaQuery = builder.createQuery(Uuidclass.class);
+		criteriaQuery.from(Uuidclass.class);
+		List<Uuidclass> list = session.createQuery(criteriaQuery).getResultList(); //call session 
 		session.close();
 		return null;
 	}
@@ -70,6 +96,12 @@ public class UuidDao implements Dao<Uuidclass> {
 		s.getTransaction().commit();
 		s.close();
 		
+	}
+
+	@Override
+	public Uuidclass get(int id) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

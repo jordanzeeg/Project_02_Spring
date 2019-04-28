@@ -42,11 +42,12 @@ public class PostLikeController {
 		PostLike postLike = new PostLike();
 		postLike = service.get(id);
 		return ResponseEntity.ok(postLike);
-	}
 
-	@GetMapping("/bypost{postId}") // sets variable as part of the url
-	public ResponseEntity<?> getPostLikeByPostId(@PathVariable int postId, HttpServletResponse response)
-			throws IOException {
+		}
+	
+	@GetMapping("/{postId}") // sets variable as part of the url
+	public ResponseEntity<?> getPostLikeByPostId(@PathVariable int postId, HttpServletResponse response) throws IOException { 
+
 		// @Pathvariable sets the variable in the url to the parameter
 
 		List<PostLike> postLikes = service.getLikeBasedOnPosttId(postId);
@@ -59,14 +60,16 @@ public class PostLikeController {
 //			
 //	}
 	@PostMapping
-	public ResponseEntity<?> SavePostLike(@RequestBody PostLike t) {
-		Messengering mess = new Messengering(1, "PostLike already exists in Database. unable to update");
-		Messengering success = new Messengering(0, "Save successful");
-		if (t.getId() == 0) {
-			service.save(t);
-			return ResponseEntity.ok(success);
-		} else
-			return ResponseEntity.ok(mess);
+
+	public ResponseEntity<?> SavePostLike(@RequestBody PostLike t) { 
+		Messengering mess = new Messengering(1,"PostLike already exists in Database. unable to update");
+		Messengering success = new Messengering(0,"Save successful");
+		System.out.println(t);
+		if(t.getId()== 0) {
+		service.save(t);
+		return ResponseEntity.ok(success);
+		}else return ResponseEntity.ok(mess);
+
 	}
 
 	@PutMapping

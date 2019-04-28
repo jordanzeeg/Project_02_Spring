@@ -73,6 +73,7 @@ public class FriendController {
 		Friend dataFriend = service.getByUsername(friend.getUsername());
 		if (dataFriend.getId() == 0) {
 			service.save(friend);
+			
 			return ResponseEntity.ok().body(success);
 		} else
 			return ResponseEntity.ok(mess);

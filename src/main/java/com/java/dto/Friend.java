@@ -41,21 +41,24 @@ public class Friend {
     private String email;
 
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.ALL })
-    @JoinTable(
-            name = "FRIEND_POST",
-            joinColumns = {@JoinColumn(name = "friend_id")},
-            inverseJoinColumns = {@JoinColumn(name = "post_id")}
-    )
+    @ManyToMany( mappedBy = "friends",fetch = FetchType.EAGER, cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE
+        })
     @JsonIgnoreProperties("friends")
     private List<Post> posts;
 
     //TODO heres a marker if this fails
-//    @JsonIgnore
-//	 @OneToOne(fetch = FetchType.EAGER, cascade = { CascadeType.ALL })
-//	 @JoinColumn(name = "friend_id")
-//    private Uuidclass uuid;
+    @JsonIgnore
+	 @OneToOne(fetch = FetchType.EAGER, cascade = { CascadeType.ALL })
+	 @JoinColumn(name = "friend_id")
+    private Uuidclass uuid;
 
+//	@Id
+//  @GeneratedValue(generator = "uuid")
+//  @GenericGenerator(name = "uuid", strategy = "uuid2")
+//	@Column(name = "resetkey")
+//	private UUID resetkey;
     // Constructors
 
     public Friend() {

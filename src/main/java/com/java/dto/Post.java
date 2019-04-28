@@ -10,6 +10,7 @@ import org.hibernate.annotations.LazyCollectionOption;
 import java.sql.Timestamp;
 import java.util.List;
 
+
 @Entity
 public class Post {
     @Id
@@ -25,13 +26,21 @@ public class Post {
 
     //TODO: - Add property for post url image(S3)
 
-    @ManyToMany( mappedBy = "posts", cascade = { CascadeType.ALL})
+    @ManyToMany( cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE
+        })
+    @JoinTable(
+            name = "FRIEND_POST",
+            joinColumns = {@JoinColumn(name = "post_id")},
+            inverseJoinColumns = {@JoinColumn(name = "friend_id")}
+    )
     @LazyCollection(LazyCollectionOption.FALSE)
-    @JsonIgnoreProperties("posts")
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    @JsonIdentityReference(alwaysAsId = true)
     private List<Friend> friends;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "post", cascade = { CascadeType.ALL })
-    
     private List<Comment> comments;
 
     @OneToMany( mappedBy = "post", cascade = { CascadeType.ALL })

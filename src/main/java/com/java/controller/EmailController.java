@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.java.dto.Friend;
 import com.java.dto.Messengering;
 
 import org.springframework.mail.javamail.JavaMailSender;
@@ -25,14 +26,16 @@ public class EmailController {
 	
 	//TODO add parameters here
 	@PostMapping
-	public ResponseEntity<?> sendEmail(@RequestBody Messengering messenger) {
+	public ResponseEntity<?> sendEmail(@RequestBody Friend friend) {
 		mailSender.send(new MimeMessagePreparator() { //sends email
 			String link = new String();
+			
 			@Override
 			public void prepare(MimeMessage mimeMessage) throws Exception {
 				MimeMessageHelper messageHelper = new MimeMessageHelper(
 						mimeMessage, true, "UTF-8");
-					messageHelper.setSubject("Password Reset");	
+				messageHelper.setTo(friend.getEmail());
+					messageHelper.setSubject("Password Reset for FaceYourBookSpace");	
 					messageHelper.setText("This is a reset code. copy the code below into the field asking "
 							+ "for the reset code when you go to reset your password\n");
 			}

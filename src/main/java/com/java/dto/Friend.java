@@ -61,8 +61,8 @@ public class Friend {
 
 
 
-	  @GeneratedValue()
-		@Column(name = "resetkey",nullable = false)
+	  
+		@Column(name = "resetkey")
 	private String resetkey;
     // Constructors
 

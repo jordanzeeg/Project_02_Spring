@@ -2,6 +2,8 @@ package com.java.dto;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.Generated;
+import org.hibernate.annotations.GenerationTime;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
@@ -57,10 +59,11 @@ public class Friend {
 //    @LazyCollection(LazyCollectionOption.FALSE)
 //    private Uuidclass uuid;
 
-  @GeneratedValue(generator = "uuid")
-  @GenericGenerator(name = "uuid", strategy = "uuid2")
-	@Column(name = "resetkey")
-	private UUID resetkey;
+
+
+	  @GeneratedValue()
+		@Column(name = "resetkey",nullable = false)
+	private String resetkey;
     // Constructors
 
     public Friend() {
@@ -144,7 +147,15 @@ public class Friend {
     // Utility
 
 
-    @Override public String toString() { return "{\n" + "\"id\":\"" + id + "\",\n" +
+    public String getResetkey() {
+		return resetkey;
+	}
+
+	public void setResetkey(String resetkey) {
+		this.resetkey = resetkey;
+	}
+
+	@Override public String toString() { return "{\n" + "\"id\":\"" + id + "\",\n" +
             " \"username\":\"" + username + '\"' + ",\n" +
             " \"salt\":\"" + salt + '\"' + ",\n" +
             " \"password\":\"" + password + '\"' + ",\n" +

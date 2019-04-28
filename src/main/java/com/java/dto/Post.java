@@ -36,8 +36,7 @@ public class Post {
             inverseJoinColumns = {@JoinColumn(name = "friend_id")}
     )
     @LazyCollection(LazyCollectionOption.FALSE)
-    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-    @JsonIdentityReference(alwaysAsId = true)
+    @JsonIgnoreProperties("posts")
     private List<Friend> friends;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "post", cascade = { CascadeType.ALL })

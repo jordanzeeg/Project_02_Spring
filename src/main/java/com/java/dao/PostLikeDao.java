@@ -1,25 +1,19 @@
 package com.java.dao;
 
 import java.util.List;
-import java.util.Optional;
 
 import javax.persistence.NoResultException;
-import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.ParameterExpression;
-import javax.persistence.criteria.Root;
 
 import org.hibernate.Session;
-
-import com.java.dto.PostLike;
-import com.java.util.LoggerSingleton;
-
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
+
+import com.java.dto.PostLike;
+import com.java.util.LoggerSingleton;
 
 @Repository
 public class PostLikeDao implements Dao<PostLike> {

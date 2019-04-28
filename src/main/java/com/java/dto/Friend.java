@@ -1,5 +1,6 @@
 package com.java.dto;
 
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 import org.hibernate.mapping.Join;
@@ -11,6 +12,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Table(name = "FRIEND")
@@ -48,8 +50,11 @@ public class Friend {
     @JsonIgnoreProperties("friends")
     private List<Post> posts;
 
-    
-    //TODO: - add property for profile pic (S3)
+    //TODO heres a marker if this fails
+//    @JsonIgnore
+//	 @OneToOne(fetch = FetchType.EAGER, cascade = { CascadeType.ALL })
+//	 @JoinColumn(name = "friend_id")
+//    private Uuidclass uuid;
 
     // Constructors
 
@@ -67,9 +72,11 @@ public class Friend {
         this.posts = posts;
     }
 
+    
     // Getters and Setters
 
-    public int getId() {
+
+	public int getId() {
         return id;
     }
 
@@ -154,5 +161,13 @@ public class Friend {
   this.email = email;
   this.salt = salt;
 }
+
+//	public Uuidclass getUuid() {
+//		return uuid;
+//	}
+//
+//	public void setUuid(Uuidclass uuid) {
+//		this.uuid = uuid;
+//	}
 
 }

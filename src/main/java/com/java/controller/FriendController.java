@@ -114,7 +114,7 @@ public class FriendController {
 		Messengering success = new Messengering(0, "Friend now exists in Database. Registration successful");
 		Friend dataFriend = service.getUsername(friend.getUsername());
 		Friend emailFriend = service.getEmail(friend.getEmail());
-		if (dataFriend != null) {
+		if (dataFriend.getId()!= 0) {
 			return ResponseEntity.ok().body(mess);
 		}
 		if (emailFriend != null) {
@@ -134,7 +134,7 @@ public class FriendController {
 		Messengering success = new Messengering(0, "Login successful");
 
 		Friend dataFriend = service.getUsername(friend.getUsername());// info from db
-		if (dataFriend == null) {
+		if (dataFriend.getId()==0) {
 			return ResponseEntity.ok(mess);
 		}
 

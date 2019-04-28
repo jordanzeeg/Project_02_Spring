@@ -1,5 +1,7 @@
 package com.java.dto;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
@@ -45,13 +47,14 @@ public class Friend {
             CascadeType.PERSIST,
             CascadeType.MERGE
         })
+    @Fetch(value = FetchMode.SUBSELECT)
     @JsonIgnoreProperties("friends")
     private List<Post> posts;
 
     //TODO heres a marker if this fails
     @JsonIgnore
-	 @OneToOne(fetch = FetchType.EAGER, cascade = { CascadeType.ALL })
-	 @JoinColumn(name = "friend_id")
+	 @OneToOne(mappedBy = "friend", cascade = { CascadeType.ALL })
+    @LazyCollection(LazyCollectionOption.FALSE)
     private Uuidclass uuid;
 
 //	@Id

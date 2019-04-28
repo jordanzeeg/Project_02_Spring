@@ -2,6 +2,7 @@ package com.java.dto;
 
 import java.util.UUID;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -13,6 +14,10 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @Entity
 @Table(name = "Uuidclass")
 public class Uuidclass {
@@ -23,7 +28,10 @@ public class Uuidclass {
 	@Column(name = "resetkey")
 	private UUID resetkey;
 	
-	 @OneToOne(mappedBy = "friend",fetch = FetchType.EAGER)
+	 @OneToOne( cascade = { CascadeType.ALL })
+	    @JoinColumn(name = "friend_id", nullable = false)
+	 @JsonIgnoreProperties("uuid")
+	 @LazyCollection(LazyCollectionOption.FALSE)
 	 private Friend friend;
 
 	public UUID getResetkey() {

@@ -97,8 +97,10 @@ public class FriendDao implements Dao<Friend> {
 	public void update(Friend t) {
 		Session s = sf.openSession();
 		s.beginTransaction();
+		//Transaction tx = s.beginTransaction();
 		s.update(t);
 		s.getTransaction().commit();
+		//tx.commit();
 		s.close();
 
 	}

@@ -77,17 +77,68 @@ public class FriendController {
 			return ResponseEntity.ok(mess);
 	}
 
-	@PutMapping() // "/byid{id}"
+	@PutMapping // "/byid{id}"
 	public ResponseEntity<?> UpdateFriend(@RequestBody Friend friend) throws IOException {
-		Messengering mess = new Messengering(7, "Friend not found in Database");
+		System.out.println("id: "+ friend.getId());
+		Messengering mess = new Messengering(1, "Friend not found in Database");
+		Messengering mess1 = new Messengering(7, "Username already existed. Please use a different username");
+		Messengering mess2 = new Messengering(2, "Email already existed. Please use a different username");
 		Messengering success = new Messengering(0, "Friend exists in Database. Update successful");
-		Friend dataFriend = service.getByUsername(friend.getUsername());
-		if (dataFriend.getId() == 0) { // TODO ask people if null is what get actually returns
+		System.out.println("friend from front end: " + friend);
+		//Friend dataFriend = service.getByUsername(friend.getUsername());
+		Friend dataFriend = service.get(friend.getId());
+		System.out.println("data friend from back end: " + dataFriend);
+		if (dataFriend == null) { // TODO ask people if null is what get actually returns
 			// response.getWriter().println("friend is not currently in database. save
 			// friend first");
 			return ResponseEntity.ok().body(mess);
 		} else {
-			service.update(friend);
+			
+			//trying new thing
+			for(int i=0; i<service.getAll().size(); i++) {
+				if(!friend.getUsername().equals(dataFriend.getUsername()) && !friend.getUsername().equals(service.getAll().get(i).getUsername())) {
+					dataFriend.setUsername(friend.getUsername());
+					
+				}else if(!friend.getUsername().equals(dataFriend.getUsername()) && friend.getUsername().equals(service.getAll().get(i).getUsername())){
+					return ResponseEntity.ok().body(mess1);
+					
+				}/*else {
+					dataFriend.setUsername(dataFriend.getUsername());
+				}*/ //this is not necessary
+			}
+			for(int i=0; i<service.getAll().size(); i++) {
+				if(!friend.getEmail().equals(dataFriend.getEmail()) && !friend.getEmail().equals(service.getAll().get(i).getEmail())) {
+					dataFriend.setEmail(friend.getEmail());
+					
+				}else if(!friend.getEmail().equals(dataFriend.getEmail()) && friend.getEmail().equals(service.getAll().get(i).getEmail())){
+					return ResponseEntity.ok().body(mess2);
+					
+				}/*else {
+					dataFriend.setEmail(dataFriend.getEmail());
+				}*/
+			}
+			
+			if(!friend.getFirstName().equals(dataFriend.getFirstName())) {
+				dataFriend.setFirstName(friend.getFirstName());
+			}else {
+				dataFriend.setFirstName(dataFriend.getFirstName());
+			}
+			
+			if(!friend.getLastName().equals(dataFriend.getLastName())) {
+				dataFriend.setLastName(friend.getLastName());
+			}else {
+				dataFriend.setLastName(dataFriend.getLastName());
+			}
+			
+			if(!friend.getPassword().equals(dataFriend.getPassword())) {
+				dataFriend.setPassword(friend.getPassword());
+			}else {
+				dataFriend.setPassword(dataFriend.getPassword());
+			}
+			
+			
+			System.out.println("friend to be update: " + dataFriend);
+			service.update(dataFriend);
 			// response.getWriter().println("Inserted successfully");
 			return ResponseEntity.ok().body(success);
 		}
@@ -113,7 +164,7 @@ public class FriendController {
 		Messengering success = new Messengering(0, "Friend now exists in Database. Registration successful");
 		Friend dataFriend = service.getUsername(friend.getUsername());
 		Friend emailFriend = service.getEmail(friend.getEmail());
-		if (dataFriend != null) {
+		if (dataFriend.getId() != 0) {
 			return ResponseEntity.ok().body(mess);
 		}
 		if (emailFriend != null) {

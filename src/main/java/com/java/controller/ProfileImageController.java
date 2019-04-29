@@ -13,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @RestController
@@ -22,8 +24,8 @@ public class ProfileImageController {
 
     // Credentials for S3 TODO: - figure out way not to hardcode this in controller
     AWSCredentials credentials =
-            new BasicAWSCredentials("AKIAUSWONA5PAOG6MZGL",
-                    "mD2xvUOZLZtnFIenWjTNnBtmBJvAMbLSOmnsd5D4"
+            new BasicAWSCredentials("",
+                    ""
             );
     // BucketName for S3 service
     String bucketName = "faceyourbookspace";
@@ -35,7 +37,7 @@ public class ProfileImageController {
             .withRegion(Regions.US_EAST_2)
             .build();
 
-    @PostMapping()
+    @PostMapping("/upload")
     public ResponseEntity<?> saveProfilePic(@RequestParam("username") String username,
                                             @RequestParam("file")MultipartFile file) throws IOException {
         // Key to get specific user's folder
@@ -43,6 +45,7 @@ public class ProfileImageController {
         String URI = "Failed to save file";
         ObjectMetadata objectMetadata = new ObjectMetadata();
         objectMetadata.setContentType("image/jpeg");
+        List<String> url = new ArrayList<>();
 
         try {
             InputStream is = file.getInputStream();
@@ -55,13 +58,14 @@ public class ProfileImageController {
             }
             S3Object s3Object =  s3client.getObject(new GetObjectRequest(bucketName, key));
             URI = s3Object.getObjectContent().getHttpRequest().getURI().toString();
+            url.add(URI);
 
         } catch(IOException e) {
             LoggerSingleton.getLogger().info("Failed to save file file");
             e.printStackTrace();
         }
 
-        return ResponseEntity.ok().body(URI);
+        return ResponseEntity.ok().body(url);
 
     }
 
@@ -70,6 +74,7 @@ public class ProfileImageController {
         // Key to get specific user's folder
         String key = "user_profile_pic/" + username + "/profile_pic";
         String defaultKey = "user_profile_pic/default/default.jpg";
+        List<String> url = new ArrayList<>();
 
         // boolean to determine if user folder exists
         boolean exists = s3client.doesObjectExist(bucketName, key);
@@ -81,15 +86,17 @@ public class ProfileImageController {
             S3Object s3Object = s3client.getObject(new GetObjectRequest(bucketName, key));
             // Get URI of object from AWS
             String URI = s3Object.getObjectContent().getHttpRequest().getURI().toString();
+            url.add(URI);
 
-            return ResponseEntity.ok().body(URI);
+            return ResponseEntity.ok().body(url);
 
         } else {
             S3Object s3Object = s3client.getObject(new GetObjectRequest(bucketName, defaultKey));
             // Get URI of object from AWS
             String URI = s3Object.getObjectContent().getHttpRequest().getURI().toString();
+            url.add(URI);
 
-            return ResponseEntity.ok().body(URI);
+            return ResponseEntity.ok().body(url);
         }
 
     }

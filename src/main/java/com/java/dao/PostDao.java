@@ -31,34 +31,34 @@ public class PostDao implements Dao<Post> {
 		return t;
 	}
 
-//	@Override
-//	public List<Post> getAll() {
-//		Session session=sf.openSession();
-//		List<Post> list = new ArrayList<Post>();
-//		//Use nondeprecated things to do criteria
-//		CriteriaBuilder builder = session.getCriteriaBuilder();
-//		CriteriaQuery<Post> criteriaQuery = builder.createQuery(Post.class);
-//		criteriaQuery.from(Post.class);
-//		try {
-//		list = session.createQuery(criteriaQuery).getResultList(); //call session 
-//		LoggerSingleton.getLogger().info(" list created in PostDao.getAll() "+ list  );
-//		}
-//		catch(NoResultException e){
-//			LoggerSingleton.getLogger().info("Empty list created in PostDao.getAll()" );	
-//		}
-//		session.close();
-//		return list;
-//	}
 	@Override
 	public List<Post> getAll() {
-		List<Post> list = new ArrayList<Post>();
 		Session session=sf.openSession();
-		Query<Post> q = session.createQuery("from Post"); //hql query select a.firstName, a.lastName from Book b join b.authors a where b.id = :id
-		list = q.list();								//join Post.friend
+		List<Post> list = new ArrayList<Post>();
+		//Use nondeprecated things to do criteria
+		CriteriaBuilder builder = session.getCriteriaBuilder();
+		CriteriaQuery<Post> criteriaQuery = builder.createQuery(Post.class);
+		criteriaQuery.from(Post.class);
+		try {
+		list = session.createQuery(criteriaQuery).getResultList(); //call session 
+		LoggerSingleton.getLogger().info(" list created in PostDao.getAll() "+ list  );
+		}
+		catch(NoResultException e){
+			LoggerSingleton.getLogger().info("Empty list created in PostDao.getAll()" );	
+		}
 		session.close();
 		return list;
 	}
-	
+//	@Override
+//	public List<Post> getAll() {
+//		List<Post> list = new ArrayList<Post>();
+//		Session session=sf.openSession();
+//		Query<Post> q = session.createQuery("from Post"); //hql query select a.firstName, a.lastName from Book b join b.authors a where b.id = :id
+//		list = q.list();								//join Post.friend
+//		session.close();
+//		return list;
+//	}
+//	
 
 	@Override
 	public void save(Post t) {

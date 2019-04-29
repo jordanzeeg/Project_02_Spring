@@ -40,7 +40,7 @@ public class PostController {
 	}
 
 	
-	@GetMapping("/{authorId}") // pass in user id
+	@GetMapping("/user/{authorId}") // pass in user id
 	public ResponseEntity<?> GetPostsByUserId(@PathVariable int authorId) {
 		List<Post> posts = new ArrayList<Post>();
 		posts = service.getPostByAuthorId(authorId);

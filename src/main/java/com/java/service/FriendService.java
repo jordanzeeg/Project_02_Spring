@@ -1,5 +1,6 @@
 package com.java.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +44,7 @@ public class FriendService implements FriendServiceInterface<Friend> {
 		t.setPassword(passwordToDB); // setting encrypted password to be save in the db
 
 		dao.save(t);
-		
+
 		LoggerSingleton.getLogger().info("SAVED a Friend object to database");
 
 	}
@@ -69,6 +70,21 @@ public class FriendService implements FriendServiceInterface<Friend> {
 		LoggerSingleton.getLogger().info("DELETED a Friend object to database");
 	}
 
+	public List<Friend> search(String param) {
+		List<Friend> all = dao.getAll();
+		List<Friend> friends = new ArrayList<Friend>();
+		if (param == "" || param == null || param == " ") {
+			return all;
+		}
+		for (int i = 0; i < all.size(); i++) {
+			if (all.get(i).getUsername().toLowerCase().contains(param.toLowerCase())) {
+				friends.add(all.get(i));
+			}
+		}
+
+		return friends;
+	}
+
 	public Friend getByUsername(String username) {
 		LoggerSingleton.getLogger().info("FETCHING Friend object based on friendUsername: " + username);
 		Friend friend = dao.getByUsername(username);
@@ -76,20 +92,6 @@ public class FriendService implements FriendServiceInterface<Friend> {
 		LoggerSingleton.getLogger().info("FETCHED Friend object based on friendId: " + friend.getId());
 		return friend;
 	}
-
-//	public Friend getByUsername(String username) {
-//		LoggerSingleton.getLogger().info("FETCHING Friend object based on username: "+username);
-//		List<Friend> friends = getAll();
-//		Friend friend = new Friend();
-//		for(int i = 0; i< friends.size();i++) {
-//			if(friends.get(i).getUsername() == username) {
-//				friend = storeFriend(friends.get(i));
-//				LoggerSingleton.getLogger().info("Found friend in List by Username "+username);
-//			}
-//		}	
-//		LoggerSingleton.getLogger().info("FETCHED Friend object based on username: "+username);
-//		return friend;
-//	}
 
 	public Friend storeFriend(Friend friend) {
 		Friend friend2 = new Friend();

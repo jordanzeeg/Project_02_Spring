@@ -37,7 +37,7 @@ public class EmailController {
 				messageHelper.setTo(friend.getEmail());
 					messageHelper.setSubject("Password Reset for FaceYourBookSpace");	
 					messageHelper.setText("This is a reset code. copy the code below into the field asking "
-							+ "for the reset code when you go to reset your password\n" +friend.getId());
+							+ "for the reset code when you go to reset your password\n" +friend.getResetkey());
 			}
 		});
 		Messengering mess = new Messengering(0,"success");

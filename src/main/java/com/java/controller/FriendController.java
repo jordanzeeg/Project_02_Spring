@@ -63,6 +63,16 @@ public class FriendController {
 		return ResponseEntity.ok().body(service.search(param));
 	}
 
+	@GetMapping("/reset/{resetKey}")
+	public ResponseEntity<?> getFriendByResetKey(@PathVariable String resetKey){
+		return ResponseEntity.ok(service.getByResetKey(resetKey));
+	}
+	
+//	@GetMapping("/getbypostid") //will add if we have time
+//	public void getFriendByPostId(@PathVariable int postId, HttpServletResponse response) throws IOException{
+//			
+//	}
+
 	@PostMapping()
 	public ResponseEntity<?> SaveFriend(@RequestBody Friend friend) {
 		Messengering mess = new Messengering(7, "Friend already exists in Database");
@@ -138,4 +148,5 @@ public class FriendController {
 		return ResponseEntity.ok(mess);
 
 	}
+	
 }

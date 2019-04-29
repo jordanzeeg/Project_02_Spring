@@ -148,9 +148,14 @@ public class FriendService implements FriendServiceInterface<Friend> {
 	public Friend getByResetKey(String resetKey) {
 		List<Friend> friends = this.getAll();
 		Friend friend = new Friend();
+		System.out.println("reset Key: " +resetKey );
 		for(int i = 0;i<friends.size();i++) {
-			if(friends.get(i).getResetkey() == resetKey) {
-				return friends.get(i);
+			System.out.println("test against: " + friends.get(i).getResetkey());
+			if(friends.get(i).getResetkey()!=null) {
+				if(resetKey.equals(friends.get(i).getResetkey())){
+					friend = friends.get(i);
+					System.out.println("made it inside the if statement");
+				}
 			}
 		}
 		return friend;

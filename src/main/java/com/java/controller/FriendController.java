@@ -63,7 +63,7 @@ public class FriendController {
 		return ResponseEntity.ok().body(service.search(param));
 	}
 
-	@GetMapping("/reset/{resetkey}")
+	@GetMapping("/reset/{resetKey}")
 	public ResponseEntity<?> getFriendByResetKey(@PathVariable String resetKey){
 		return ResponseEntity.ok(service.getByResetKey(resetKey));
 	}

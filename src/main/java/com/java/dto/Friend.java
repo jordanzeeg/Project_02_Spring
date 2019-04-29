@@ -1,6 +1,17 @@
 package com.java.dto;
 
+<<<<<<< HEAD
 import java.util.List;
+=======
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.Generated;
+import org.hibernate.annotations.GenerationTime;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+import org.hibernate.mapping.Join;
+>>>>>>> f1a6d3267f337cd8fbbe226cf5b42a1483e775c5
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -13,7 +24,13 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+<<<<<<< HEAD
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+=======
+import javax.persistence.*;
+import java.util.List;
+import java.util.UUID;
+>>>>>>> f1a6d3267f337cd8fbbe226cf5b42a1483e775c5
 
 @Entity
 @Table(name = "FRIEND")
@@ -42,18 +59,25 @@ public class Friend {
     private String email;
 
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.ALL })
-    @JoinTable(
-            name = "FRIEND_POST",
-            joinColumns = {@JoinColumn(name = "friend_id")},
-            inverseJoinColumns = {@JoinColumn(name = "post_id")}
-    )
+    @ManyToMany( mappedBy = "friends",fetch = FetchType.EAGER, cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE
+        })
+    @Fetch(value = FetchMode.SUBSELECT)
     @JsonIgnoreProperties("friends")
     private List<Post> posts;
 
-    
-    //TODO: - add property for profile pic (S3)
+//    //TODO heres a marker if this fails
+//    @JsonIgnore
+//	 @OneToOne(mappedBy = "friend", cascade = { CascadeType.ALL })
+//    @LazyCollection(LazyCollectionOption.FALSE)
+//    private Uuidclass uuid;
 
+
+
+	  
+		@Column(name = "resetkey")
+	private String resetkey;
     // Constructors
 
     public Friend() {
@@ -70,9 +94,11 @@ public class Friend {
         this.posts = posts;
     }
 
+    
     // Getters and Setters
 
-    public int getId() {
+
+	public int getId() {
         return id;
     }
 
@@ -135,7 +161,15 @@ public class Friend {
     // Utility
 
 
-    @Override public String toString() { return "{\n" + "\"id\":\"" + id + "\",\n" +
+    public String getResetkey() {
+		return resetkey;
+	}
+
+	public void setResetkey(String resetkey) {
+		this.resetkey = resetkey;
+	}
+
+	@Override public String toString() { return "{\n" + "\"id\":\"" + id + "\",\n" +
             " \"username\":\"" + username + '\"' + ",\n" +
             " \"salt\":\"" + salt + '\"' + ",\n" +
             " \"password\":\"" + password + '\"' + ",\n" +
@@ -157,5 +191,13 @@ public class Friend {
   this.email = email;
   this.salt = salt;
 }
+
+//	public Uuidclass getUuid() {
+//		return uuid;
+//	}
+//
+//	public void setUuid(Uuidclass uuid) {
+//		this.uuid = uuid;
+//	}
 
 }

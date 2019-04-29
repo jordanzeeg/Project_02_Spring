@@ -14,7 +14,7 @@ public interface PostLikeServiceInterface<T> {
 	
 	public void update(PostLike t);//update 
 	
-	public void delete(PostLike t);
+	public void delete(int postid, int authorid);
 	
 	//get PosttLikes based on PostId
 	public List<PostLike> getLikeBasedOnPosttId(int postId);

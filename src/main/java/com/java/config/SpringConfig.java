@@ -14,9 +14,15 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
+import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+
+import javax.servlet.MultipartConfigElement;
 
 @Configuration
 @ComponentScan("com.java")
@@ -59,6 +65,8 @@ public class SpringConfig {
         hibernateProperties.setProperty(Environment.DIALECT, "org.hibernate.dialect.Oracle12cDialect");
         //hibernateProperties.setProperty(Environment.HBM2DDL_AUTO, "update");
         factoryBean.setAnnotatedClasses(Friend.class, PostLike.class, Post.class, Comment.class, CommentLike.class);
+        hibernateProperties.setProperty(Environment.HBM2DDL_AUTO, "update");
+        factoryBean.setAnnotatedClasses(Friend.class, PostLike.class, Post.class, Comment.class, CommentLike.class, Uuidclass.class);
         factoryBean.setHibernateProperties(hibernateProperties);
         factoryBean.afterPropertiesSet();
         return factoryBean.getObject();
@@ -69,5 +77,29 @@ public class SpringConfig {
         HibernateTransactionManager tx= new HibernateTransactionManager();
         tx.setSessionFactory(sessionFactory());
         return tx;
+    }
+
+    @Bean(name = "multipartResolver")
+    public CommonsMultipartResolver multipartResolver() {
+        CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
+        multipartResolver.setMaxUploadSize(1000000000);
+        return multipartResolver;
+    }
+    @Bean
+    public JavaMailSender getJavaMailSender() {
+        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+        mailSender.setHost("smtp.gmail.com");
+        mailSender.setPort(587);
+         
+        mailSender.setUsername("jortestguy@gmail.com");
+        mailSender.setPassword("drawposs");
+         
+        Properties props = mailSender.getJavaMailProperties();
+        props.put("mail.transport.protocol", "smtp");
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+
+         
+        return mailSender;
     }
 }

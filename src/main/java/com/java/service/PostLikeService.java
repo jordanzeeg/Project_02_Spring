@@ -46,9 +46,9 @@ public class PostLikeService implements PostLikeServiceInterface<PostLike> {
 	}
 
 	@Override
-	public void delete(PostLike t) {
+	public void delete(int postid, int authorid) {
 		LoggerSingleton.getLogger().info("DELETING a PostLike object from the database");
-		dao.delete(t);	
+		dao.deleteByPostAndAuthor(postid, authorid);	
 		LoggerSingleton.getLogger().info("DELETED a PostLike object to the database");
 	}
 

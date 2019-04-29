@@ -81,16 +81,9 @@ public class PasswordAndSalt {
 		// Generate New secure password with the same salt
 	String newSecurePassword = generateSecurePassword(providedPassword, salt);// encrypting the user password with
 																					// the same salt create
-
 		// check if two passwords are equal
 		returnValue = newSecurePassword.equalsIgnoreCase(securePassword); // check if new encrypted password is the same
-																			// as the one stored in the db
-
-		System.out.println("New sec pass: ");
-		System.out.println(newSecurePassword);
-		System.out.println("Return Value: ");
-		System.out.println(returnValue);
-
+		
 		return returnValue;
 	}
 }

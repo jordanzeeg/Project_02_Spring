@@ -86,6 +86,7 @@ public class FriendDao implements Dao<Friend> {
 		Transaction tx = s.beginTransaction(); // changed by Poho
 		// s.beginTransaction(); original
 		s.save(t);
+		s.flush();
 		// s.getTransaction().commit(); //original
 		tx.commit(); // changed by Poho
 

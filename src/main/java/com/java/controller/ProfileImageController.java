@@ -1,15 +1,14 @@
 package com.java.controller;
 
 import java.io.IOException;
+import java.io.InputStream;
 
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,6 +23,8 @@ import com.amazonaws.services.s3.model.GetObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.S3Object;
+import com.java.util.LoggerSingleton;
+
 
 
 @RestController
@@ -33,8 +34,8 @@ public class ProfileImageController {
 
     // Credentials for S3 TODO: - figure out way not to hardcode this in controller
     AWSCredentials credentials =
-            new BasicAWSCredentials("",
-                    ""
+            new BasicAWSCredentials("AKIAUSWONA5PAOG6MZGL",
+                    "mD2xvUOZLZtnFIenWjTNnBtmBJvAMbLSOmnsd5D4"
             );
     // BucketName for S3 service
     String bucketName = "faceyourbookspace";
@@ -46,45 +47,37 @@ public class ProfileImageController {
             .withRegion(Regions.US_EAST_2)
             .build();
 
-
-    //@PostMapping("/upload")
-    @RequestMapping(value = "/file", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody String saveProfilePic(@RequestParam("username") String username,
-                                            @RequestParam("file") MultipartFile file) {
+    @PostMapping()
+    public ResponseEntity<?> saveProfilePic(@RequestParam("username") String username,
+                                            @RequestParam("file")MultipartFile file) throws IOException {
         // Key to get specific user's folder
         String key = "user_profile_pic/" + username + "/profile_pic";
-
-        // boolean to determine if user folder exists
-        boolean exists = s3client.doesObjectExist(bucketName, key);
+        String URI = "Failed to save file";
         ObjectMetadata objectMetadata = new ObjectMetadata();
+        objectMetadata.setContentType("image/jpeg");
 
-        // Check if folder exists, if so delete it and replace it with new one (changing profle pic) else create a
-        // file with profile pic
-        if (exists) {
-            s3client.deleteObject(bucketName, key);
-            try {
-                s3client.putObject(new PutObjectRequest(bucketName, key, file.getInputStream(), objectMetadata).withCannedAcl(CannedAccessControlList.PublicRead));
-            } catch (IOException e) {
-                e.printStackTrace();
+        try {
+            InputStream is = file.getInputStream();
+            boolean exists = s3client.doesObjectExist(bucketName, key);
+            if (exists) {
+                s3client.deleteObject(bucketName, key);
+                s3client.putObject(new PutObjectRequest(bucketName, key, is, objectMetadata).withCannedAcl(CannedAccessControlList.PublicRead));
+            } else {
+                s3client.putObject(new PutObjectRequest(bucketName, key, is, objectMetadata).withCannedAcl(CannedAccessControlList.PublicRead));
             }
-        } else {
-            try {
-                s3client.putObject(new PutObjectRequest(bucketName, key, file.getInputStream(), objectMetadata).withCannedAcl(CannedAccessControlList.PublicRead));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            S3Object s3Object =  s3client.getObject(new GetObjectRequest(bucketName, key));
+            URI = s3Object.getObjectContent().getHttpRequest().getURI().toString();
+
+        } catch(IOException e) {
+            LoggerSingleton.getLogger().info("Failed to save file file");
+            e.printStackTrace();
         }
 
-        // Get object from file
-        S3Object s3Object = s3client.getObject(new GetObjectRequest(bucketName, key));
+        return ResponseEntity.ok().body(URI);
 
-        // Get URI of object from AWS
-        String URI = s3Object.getObjectContent().getHttpRequest().getURI().toString();
-
-        return URI;
     }
 
-    @GetMapping("/image")
+    @GetMapping()
     public ResponseEntity<?> getProfilePicByUsername(@RequestParam("username") String username) {
         // Key to get specific user's folder
         String key = "user_profile_pic/" + username + "/profile_pic";

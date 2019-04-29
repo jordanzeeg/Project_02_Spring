@@ -20,7 +20,6 @@ import com.java.dto.Friend;
 import com.java.dto.Messengering;
 import com.java.dto.Uuidclass;
 import com.java.service.FriendService;
-import com.java.service.UuidclassService;
 
 @RestController
 @RequestMapping("/friends")
@@ -28,8 +27,6 @@ import com.java.service.UuidclassService;
 public class FriendController {
 	@Autowired
 	FriendService service;
-	
-
 	
 	@GetMapping
 	@ResponseBody
@@ -42,7 +39,6 @@ public class FriendController {
 	}
 
 	@GetMapping("/{id}") // sets variable as part of the url
-
 	public ResponseEntity<?> getFriendById(@PathVariable("id") int id) throws IOException {
 		// @Pathvariable sets the variable in the url to the parameter
 		Messengering mess = new Messengering(1, "Friend currently is not in database");
@@ -59,16 +55,13 @@ public class FriendController {
 	public ResponseEntity<?> getFriendByUsername(@PathVariable String username) {
 		// @Pathvariable sets the variable in the url to the parameter
 		return ResponseEntity.ok().body(service.getByUsername(username));
-
-		// TODO CRUD FRIENDS
-		// TODO getfriendbyname
-		// TODO getFriendsbyPostId
 	}
 
-//	@GetMapping("/getbypostid") //will add if we have time
-//	public void getFriendByPostId(@PathVariable int postId, HttpServletResponse response) throws IOException{
-//			
-//	}
+	@GetMapping("/search/={param}")
+	public ResponseEntity<?> searchFriend(@PathVariable String param){
+		return ResponseEntity.ok().body(service.search(param));
+	}
+
 	@PostMapping()
 	public ResponseEntity<?> SaveFriend(@RequestBody Friend friend) {
 		Messengering mess = new Messengering(7, "Friend already exists in Database");
@@ -91,6 +84,7 @@ public class FriendController {
 		Messengering mess1 = new Messengering(7, "Username already existed. Please use a different username");
 		Messengering mess2 = new Messengering(2, "Email already existed. Please use a different username");
 		Messengering success = new Messengering(0, "Friend exists in Database. Update successful");
+
 		System.out.println("friend from front end: " + friend);
 		//Friend dataFriend = service.getByUsername(friend.getUsername());
 		Friend dataFriend = service.get(friend.getId());
@@ -153,7 +147,6 @@ public class FriendController {
 
 	@DeleteMapping
 	public ResponseEntity<?> DeleteFriend(@RequestBody Friend friend) {
-		// assumption of a form of some kind
 		Messengering mess = new Messengering(1, "Friend not found in Database");
 		Messengering success = new Messengering(0, "Friend exists in Database. Delete successful");
 		if (friend.getId() != service.get(friend.getId()).getId()) { // checks if friend is in database by id
@@ -179,10 +172,7 @@ public class FriendController {
 			return ResponseEntity.ok().body(mess2);
 		}
 		service.save(friend);
-//		String username = friend.getUsername();
 		return ResponseEntity.ok().body(success);
-		// }
-		// else return ResponseEntity.ok("Friend already in database." + dataFriend);
 	}
 
 	@PostMapping("/login")

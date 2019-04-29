@@ -3,8 +3,6 @@ package com.java.config;
 import java.io.IOException;
 import java.util.Properties;
 
-import com.java.dto.*;
-import com.java.util.LoggerSingleton;
 import org.apache.tomcat.dbcp.dbcp2.BasicDataSource;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Environment;
@@ -19,10 +17,15 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
-import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import javax.servlet.MultipartConfigElement;
+import com.java.dto.Comment;
+import com.java.dto.CommentLike;
+import com.java.dto.Friend;
+import com.java.dto.Post;
+import com.java.dto.PostLike;
+import com.java.dto.Uuidclass;
+import com.java.util.LoggerSingleton;
 
 @Configuration
 @ComponentScan("com.java")
@@ -65,7 +68,7 @@ public class SpringConfig {
         hibernateProperties.setProperty(Environment.DIALECT, "org.hibernate.dialect.Oracle12cDialect");
         //hibernateProperties.setProperty(Environment.HBM2DDL_AUTO, "update");
         factoryBean.setAnnotatedClasses(Friend.class, PostLike.class, Post.class, Comment.class, CommentLike.class);
-        hibernateProperties.setProperty(Environment.HBM2DDL_AUTO, "update");
+        //hibernateProperties.setProperty(Environment.HBM2DDL_AUTO, "update");
         factoryBean.setAnnotatedClasses(Friend.class, PostLike.class, Post.class, Comment.class, CommentLike.class, Uuidclass.class);
         factoryBean.setHibernateProperties(hibernateProperties);
         factoryBean.afterPropertiesSet();

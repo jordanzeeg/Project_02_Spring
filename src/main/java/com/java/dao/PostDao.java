@@ -48,7 +48,9 @@ public class PostDao implements Dao<Post> {
 	public List<Post> getAll() {
 		List<Post> list = new ArrayList<Post>();
 		Session session=sf.openSession();
-		Query<Post> q = session.createQuery("from Post"); //hql query select a.firstName, a.lastName from Book b join b.authors a where b.id = :id
+		Query<Post> q = session.createQuery("from Post"); //hql query select a.firstName, a.lastName from Book b join b
+		// .authors a
+		// where b.id = :id
 		list = q.list();								//join Post.friend
 		session.close();
 		return list;

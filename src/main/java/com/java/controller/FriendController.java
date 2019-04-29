@@ -1,3 +1,4 @@
+
 package com.java.controller;
 
 import java.io.IOException;
@@ -77,13 +78,13 @@ public class FriendController {
 			return ResponseEntity.ok(mess);
 	}
 
-	@PutMapping // "/byid{id}"
+	@PutMapping() // "/byid{id}"
 	public ResponseEntity<?> UpdateFriend(@RequestBody Friend friend) throws IOException {
-		System.out.println("id: "+ friend.getId());
 		Messengering mess = new Messengering(1, "Friend not found in Database");
 		Messengering mess1 = new Messengering(7, "Username already existed. Please use a different username");
 		Messengering mess2 = new Messengering(2, "Email already existed. Please use a different username");
 		Messengering success = new Messengering(0, "Friend exists in Database. Update successful");
+
 
 		System.out.println("friend from front end: " + friend);
 		//Friend dataFriend = service.getByUsername(friend.getUsername());
@@ -164,8 +165,7 @@ public class FriendController {
 		Messengering success = new Messengering(0, "Friend now exists in Database. Registration successful");
 		Friend dataFriend = service.getUsername(friend.getUsername());
 		Friend emailFriend = service.getEmail(friend.getEmail());
-		if (dataFriend.getId() != 0) {
-
+		if (dataFriend.getId()!= 0) {
 			return ResponseEntity.ok().body(mess);
 		}
 		if (emailFriend != null) {
@@ -185,6 +185,7 @@ public class FriendController {
 		if (dataFriend.getId()==0) {
 			return ResponseEntity.ok(mess);
 		}
+
 		if (service.passwordValidation(friend.getUsername(), friend.getPassword())) {
 			return ResponseEntity.ok().body(success);
 		}

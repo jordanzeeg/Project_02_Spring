@@ -57,6 +57,7 @@ public class ProfileImageController {
                 s3client.putObject(new PutObjectRequest(bucketName, key, is, objectMetadata).withCannedAcl(CannedAccessControlList.PublicRead));
             }
             S3Object s3Object =  s3client.getObject(new GetObjectRequest(bucketName, key));
+            s3Object.close();
             URI = s3Object.getObjectContent().getHttpRequest().getURI().toString();
             url.add(URI);
 
@@ -70,7 +71,7 @@ public class ProfileImageController {
     }
 
     @GetMapping()
-    public ResponseEntity<?> getProfilePicByUsername(@RequestParam("username") String username) {
+    public ResponseEntity<?> getProfilePicByUsername(@RequestParam("username") String username) throws IOException {
         // Key to get specific user's folder
         String key = "user_profile_pic/" + username + "/profile_pic";
         String defaultKey = "user_profile_pic/default/default.jpg";
@@ -87,6 +88,8 @@ public class ProfileImageController {
             // Get URI of object from AWS
             String URI = s3Object.getObjectContent().getHttpRequest().getURI().toString();
             url.add(URI);
+            s3Object.close();
+
 
             return ResponseEntity.ok().body(url);
 
@@ -95,6 +98,8 @@ public class ProfileImageController {
             // Get URI of object from AWS
             String URI = s3Object.getObjectContent().getHttpRequest().getURI().toString();
             url.add(URI);
+            s3Object.close();
+
 
             return ResponseEntity.ok().body(url);
         }

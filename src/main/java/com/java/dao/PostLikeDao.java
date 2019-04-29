@@ -1,3 +1,4 @@
+
 package com.java.dao;
 
 import java.util.List;
@@ -103,5 +104,6 @@ public class PostLikeDao implements Dao<PostLike> {
 		}
 
 	}
+
 
 }

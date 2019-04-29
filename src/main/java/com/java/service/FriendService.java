@@ -1,6 +1,5 @@
 package com.java.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +51,13 @@ public class FriendService implements FriendServiceInterface<Friend> {
 	@Override
 	public void update(Friend t) {
 		LoggerSingleton.getLogger().info("UPDATING a Friend object to database");
+		PasswordAndSalt ps = new PasswordAndSalt(); 
+		String salt = ps.getSalt(30);// generating a new random salt
+
+		String passwordToDB = ps.generateSecurePassword(t.getPassword(), salt); // encrypting the password
+		t.setSalt(salt); // setting salt to be save in the db
+		t.setPassword(passwordToDB); // setting encrypted password to be save in the db
+		
 		dao.update(t);
 		LoggerSingleton.getLogger().info("UPDATED a Friend object to database");
 	}

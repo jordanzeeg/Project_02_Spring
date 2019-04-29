@@ -2,11 +2,6 @@ package com.java.service;
 
 import java.util.List;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-
-import org.hibernate.Session;
-
 import com.java.dto.Comment;
 
 public interface CommentServiceInterface<T> {

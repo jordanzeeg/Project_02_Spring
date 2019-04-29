@@ -24,9 +24,7 @@ public class ProfileImageController {
 
     // Credentials for S3 TODO: - figure out way not to hardcode this in controller
     AWSCredentials credentials =
-            new BasicAWSCredentials("AKIAUSWONA5PEST2KJMF",
-                    "AKIAUSWONA5PNUXKEOF7\r\n" + 
-                    "qRPHV7GFPrCk+Fce+Zv/XocqLlvTuX/e/mW3H7UC"
+            new BasicAWSCredentials("",""
             );
     // BucketName for S3 service
     String bucketName = "faceyourbookspace";

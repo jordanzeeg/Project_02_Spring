@@ -46,7 +46,8 @@ public class Friend {
 
     @ManyToMany( mappedBy = "friends",fetch = FetchType.EAGER, cascade = {
             CascadeType.PERSIST,
-            CascadeType.MERGE
+            CascadeType.MERGE,
+            CascadeType.REMOVE
         })
     @Fetch(value = FetchMode.SUBSELECT)
     @JsonIgnoreProperties("friends")

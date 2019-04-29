@@ -144,4 +144,20 @@ public class FriendService implements FriendServiceInterface<Friend> {
 		LoggerSingleton.getLogger().info("FETCHED Friend object based on Email: " + email);
 		return null;
 	}
+
+	public Friend getByResetKey(String resetKey) {
+		List<Friend> friends = this.getAll();
+		Friend friend = new Friend();
+		System.out.println("reset Key: " +resetKey );
+		for(int i = 0;i<friends.size();i++) {
+			System.out.println("test against: " + friends.get(i).getResetkey());
+			if(friends.get(i).getResetkey()!=null) {
+				if(resetKey.equals(friends.get(i).getResetkey())){
+					friend = friends.get(i);
+					System.out.println("made it inside the if statement");
+				}
+			}
+		}
+		return friend;
+	}
 }

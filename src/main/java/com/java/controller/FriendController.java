@@ -65,7 +65,11 @@ public class FriendController {
 		// TODO getfriendbyname
 		// TODO getFriendsbyPostId
 	}
-
+	@GetMapping("/reset/{resetkey}")
+	public ResponseEntity<?> getFriendByResetKey(@PathVariable String resetKey){
+		return ResponseEntity.ok(service.getByResetKey(resetKey));
+	}
+	
 //	@GetMapping("/getbypostid") //will add if we have time
 //	public void getFriendByPostId(@PathVariable int postId, HttpServletResponse response) throws IOException{
 //			
@@ -152,4 +156,5 @@ public class FriendController {
 		return ResponseEntity.ok(mess);
 
 	}
+	
 }
